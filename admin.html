@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>项目管理后台 · 中安安防</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+  <header class="nav">
+    <a class="brand" href="index.html">
+      <span class="brand-mark">中</span>
+      <span class="brand-text">中安安防<small>ZHONGAN SECURITY</small></span>
+    </a>
+    <nav class="nav-links">
+      <a href="index.html#services">服务</a>
+      <a href="index.html#scenarios">场景</a>
+      <a href="index.html#advantages">优势</a>
+      <a href="quote.html">报价</a>
+      <a href="proposal.html">方案</a>
+      <a href="knowledge.html">知识</a>
+      <a href="inspection.html">台账</a>
+      <a href="admin.html" aria-current="page">后台</a>
+      <a href="index.html#contact">联系</a>
+    </nav>
+    <a class="nav-cta" href="quote.html">立即报价</a>
+  </header>
+
+  <main class="admin-main">
+    <section class="admin-head">
+      <div>
+        <p class="eyebrow">管理后台</p>
+        <h1>项目管理</h1>
+        <p class="lede">学校、巡检、高风险问题和团队成员，放在一个页面里看。</p>
+      </div>
+      <div class="head-actions">
+        <span id="user-email" class="user-email"></span>
+        <button id="refresh" class="btn ghost small" type="button">刷新</button>
+        <button id="logout" class="btn ghost small" type="button">退出登录</button>
+      </div>
+    </section>
+
+    <section id="loading" class="admin-loading">正在读取后台数据…</section>
+
+    <section id="denied" class="admin-denied" hidden>
+      <p class="eyebrow">无权限</p>
+      <h2>当前账号没有后台权限</h2>
+      <p id="denied-text">后台只对管理员开放。需要开通请联系管理员。</p>
+      <a class="btn primary" href="inspection.html">返回巡检台账</a>
+    </section>
+
+    <div id="dashboard" hidden>
+      <section class="stats" aria-label="后台统计">
+        <div class="stat"><strong id="stat-schools">0</strong><span>学校 / 项目</span></div>
+        <div class="stat"><strong id="stat-records">0</strong><span>巡检记录</span></div>
+        <div class="stat"><strong id="stat-open">0</strong><span>待处理问题</span></div>
+        <div class="stat"><strong id="stat-high">0</strong><span>高风险未闭环</span></div>
+        <div class="stat"><strong id="stat-docs">0</strong><span>知识库文档</span></div>
+      </section>
+
+      <section class="admin-grid">
+        <section class="panel schools-panel">
+          <div class="panel-head">
+            <div>
+              <h2>学校 / 项目</h2>
+              <p id="schools-sub" class="panel-sub">共 0 个</p>
+            </div>
+          </div>
+
+          <details class="add-school">
+            <summary>+ 新增学校 / 项目</summary>
+            <form id="school-form" class="school-form" novalidate>
+              <div class="field-row">
+                <div class="field">
+                  <label for="school-name">学校名称</label>
+                  <input id="school-name" type="text" placeholder="例如：郑州实验小学" maxlength="40" required>
+                </div>
+                <div class="field">
+                  <label for="school-type">类型</label>
+                  <select id="school-type">
+                    <option value="小学">小学</option>
+                    <option value="中学">中学</option>
+                    <option value="职业学校">职业学校</option>
+                    <option value="其他">其他</option>
+                  </select>
+                </div>
+              </div>
+              <div class="field-row">
+                <div class="field">
+                  <label for="school-contact">联系人</label>
+                  <input id="school-contact" type="text" placeholder="姓名" maxlength="20">
+                </div>
+                <div class="field">
+                  <label for="school-phone">联系电话</label>
+                  <input id="school-phone" type="text" placeholder="手机号" maxlength="20">
+                </div>
+              </div>
+              <div class="field-row">
+                <div class="field">
+                  <label for="school-address">地址</label>
+                  <input id="school-address" type="text" placeholder="河南 · 郑州" maxlength="60">
+                </div>
+                <div class="field">
+                  <label for="school-status">状态</label>
+                  <select id="school-status">
+                    <option value="试点">试点</option>
+                    <option value="服务中" selected>服务中</option>
+                    <option value="已结束">已结束</option>
+                  </select>
+                </div>
+              </div>
+              <p id="school-error" class="form-error" role="alert"></p>
+              <button type="submit" class="btn primary small">保存学校</button>
+            </form>
+          </details>
+
+          <div class="table-wrap">
+            <table class="admin-table">
+              <thead>
+                <tr>
+                  <th>学校 / 项目</th>
+                  <th>类型</th>
+                  <th>状态</th>
+                  <th>巡检</th>
+                  <th>最近巡检</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody id="schools-body"></tbody>
+            </table>
+          </div>
+          <div id="schools-empty" class="empty-small" hidden>还没有学校，先新增一个。</div>
+        </section>
+
+        <section class="panel">
+          <div class="panel-head">
+            <div>
+              <h2>高风险未闭环</h2>
+              <p class="panel-sub">按巡检日期倒序，最多显示 8 条</p>
+            </div>
+          </div>
+          <div id="high-list" class="high-list"></div>
+          <div id="high-empty" class="empty-small" hidden>没有高风险未闭环问题。</div>
+        </section>
+      </section>
+
+      <section class="panel members-panel">
+        <div class="panel-head">
+          <div>
+            <h2>团队成员</h2>
+            <p class="panel-sub">管理员可以调整角色；巡检员只能看台账。</p>
+          </div>
+        </div>
+        <div class="table-wrap">
+          <table class="admin-table">
+            <thead>
+              <tr><th>邮箱</th><th>角色</th><th>加入时间</th></tr>
+            </thead>
+            <tbody id="members-body"></tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <span>中安安防 · 校园安全服务</span>
+    <span>© 2026 中安安防</span>
+  </footer>
+
+  <script src="vendor/supabase.js"></script>
+  <script src="supabase-config.js"></script>
+  <script src="admin.js"></script>
+</body>
+</html>
