@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>安保报价计算器 · 中安安防</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="quote.css">
+</head>
+<body>
+  <header class="nav">
+    <a class="brand" href="index.html">
+      <span class="brand-mark">中</span>
+      <span class="brand-text">中安安防<small>ZHONGAN SECURITY</small></span>
+    </a>
+    <nav class="nav-links">
+      <a href="index.html#services">服务</a>
+      <a href="index.html#scenarios">场景</a>
+      <a href="index.html#advantages">优势</a>
+      <a href="quote.html" aria-current="page">报价</a>
+      <a href="index.html#contact">联系</a>
+    </nav>
+    <a class="nav-cta" href="index.html#contact">预约方案</a>
+  </header>
+
+  <main class="quote-main">
+    <section class="quote-intro">
+      <p class="eyebrow">报价工具</p>
+      <h1>安保服务报价计算器</h1>
+      <p class="lede">按岗位、人数、天数和班次快速估算。单价是示例，可按实际合同修改；最终报价以现场评估为准。</p>
+    </section>
+
+    <section class="calculator">
+      <form id="quote-form" class="form-panel" novalidate>
+        <div class="field-row">
+          <label>岗位类型
+            <select id="role">
+              <option value="门岗" data-rate="260">门岗</option>
+              <option value="巡逻岗" data-rate="280">巡逻岗</option>
+              <option value="监控岗" data-rate="240">监控岗</option>
+              <option value="特保" data-rate="450">特保</option>
+            </select>
+          </label>
+          <label>单价（元/人/天）
+            <input id="rate" type="number" min="0" step="10" value="260" inputmode="decimal">
+          </label>
+        </div>
+
+        <div class="field-row">
+          <label>人数
+            <input id="people" type="number" min="1" step="1" value="6" inputmode="numeric">
+          </label>
+          <label>服务天数
+            <input id="days" type="number" min="1" step="1" value="30" inputmode="numeric">
+          </label>
+        </div>
+
+        <div class="field-row">
+          <label>班次
+            <select id="shift">
+              <option value="1">白班（8 小时）</option>
+              <option value="1.1">夜班（8 小时）</option>
+              <option value="1.8">24 小时值守</option>
+            </select>
+          </label>
+          <label>管理费率（%）
+            <input id="management" type="number" min="0" max="30" step="0.5" value="8" inputmode="decimal">
+          </label>
+        </div>
+
+        <div class="field-row">
+          <label>税率（%）
+            <input id="tax" type="number" min="0" max="20" step="0.5" value="6" inputmode="decimal">
+          </label>
+          <label>优惠金额（元）
+            <input id="discount" type="number" min="0" step="100" value="0" inputmode="decimal">
+          </label>
+        </div>
+
+        <div class="form-actions">
+          <button type="submit" class="btn primary">生成报价</button>
+          <button type="button" id="reset" class="btn ghost">重置</button>
+        </div>
+        <p id="error" class="error" role="alert"></p>
+      </form>
+
+      <aside class="summary" aria-live="polite">
+        <p class="eyebrow">报价单</p>
+        <h2>费用明细</h2>
+        <dl class="summary-list">
+          <div><dt>岗位</dt><dd id="out-role">门岗</dd></div>
+          <div><dt>人数 × 天数</dt><dd id="out-scale">6 人 × 30 天</dd></div>
+          <div><dt>班次系数</dt><dd id="out-shift">1.0</dd></div>
+          <div><dt>人员费用</dt><dd id="out-labor">¥46,800</dd></div>
+          <div><dt>管理费</dt><dd id="out-management">¥3,744</dd></div>
+          <div><dt>税费</dt><dd id="out-tax">¥3,033</dd></div>
+          <div><dt>优惠</dt><dd id="out-discount">-¥0</dd></div>
+        </dl>
+        <div class="total"><span>合计</span><strong id="out-total">¥53,577</strong></div>
+        <p class="summary-note">按示例单价估算，最终以现场评估和合同为准。</p>
+        <button id="copy" class="btn primary full" type="button">复制报价单</button>
+        <p id="copy-status" class="copy-status" aria-live="polite"></p>
+      </aside>
+    </section>
+
+    <section class="notes">
+      <h2>怎么用</h2>
+      <ol>
+        <li>选岗位类型，单价会自动带出示例值，也可以手动改。</li>
+        <li>填人数、服务天数，选白班、夜班或 24 小时值守。</li>
+        <li>管理费率和税率按公司实际填，没有就填 0。</li>
+        <li>点“生成报价”，再点“复制报价单”，直接发给客户。</li>
+      </ol>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <span>中安安防 · 校园安全服务</span>
+    <span>© 2026 中安安防</span>
+  </footer>
+
+  <script src="quote.js"></script>
+</body>
+</html>
