@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>校园巡检台账 · 中安安防</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="inspection.css">
+</head>
+<body>
+  <header class="nav">
+    <a class="brand" href="index.html">
+      <span class="brand-mark">中</span>
+      <span class="brand-text">中安安防<small>ZHONGAN SECURITY</small></span>
+    </a>
+    <nav class="nav-links">
+      <a href="index.html#services">服务</a>
+      <a href="index.html#scenarios">场景</a>
+      <a href="index.html#advantages">优势</a>
+      <a href="quote.html">报价</a>
+      <a href="inspection.html" aria-current="page">台账</a>
+      <a href="index.html#contact">联系</a>
+    </nav>
+    <a class="nav-cta" href="quote.html">立即报价</a>
+  </header>
+
+  <main class="ledger-main">
+    <section class="ledger-head">
+      <div>
+        <p class="eyebrow">巡检管理</p>
+        <h1>校园巡检台账</h1>
+        <p class="lede">把每天的巡检记录留下来：问题有记录、有跟进、月底能导出。先给一个学校或一个项目用，跑顺了再推广。</p>
+      </div>
+      <div class="ledger-actions">
+        <button id="export" class="btn ghost small" type="button">导出 CSV</button>
+      </div>
+    </section>
+
+    <section class="stats" aria-label="台账统计">
+      <div class="stat"><strong id="stat-total">0</strong><span>总记录</span></div>
+      <div class="stat"><strong id="stat-open">0</strong><span>待处理</span></div>
+      <div class="stat"><strong id="stat-high">0</strong><span>高风险未闭环</span></div>
+      <div class="stat"><strong id="stat-month">0</strong><span>本月记录</span></div>
+    </section>
+
+    <section class="ledger-grid">
+      <form id="record-form" class="form-card" novalidate>
+        <h2>新增巡检记录</h2>
+        <div class="field">
+          <label for="school">学校 / 项目名称</label>
+          <input id="school" type="text" placeholder="例如：郑州实验小学" maxlength="40" required>
+        </div>
+        <div class="form-row">
+          <div class="field">
+            <label for="date">巡检日期</label>
+            <input id="date" type="date" required>
+          </div>
+          <div class="field">
+            <label for="inspector">巡检人</label>
+            <input id="inspector" type="text" placeholder="姓名" maxlength="20" required>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="field">
+            <label for="category">问题类型</label>
+            <select id="category">
+              <option value="门岗">门岗</option>
+              <option value="围墙">围墙</option>
+              <option value="监控">监控</option>
+              <option value="消防">消防</option>
+              <option value="照明">照明</option>
+              <option value="其他">其他</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="severity">严重程度</label>
+            <select id="severity">
+              <option value="低">低</option>
+              <option value="中" selected>中</option>
+              <option value="高">高</option>
+            </select>
+          </div>
+        </div>
+        <div class="field">
+          <label for="status">处理状态</label>
+          <select id="status">
+            <option value="待处理" selected>待处理</option>
+            <option value="处理中">处理中</option>
+            <option value="已闭环">已闭环</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="description">问题描述</label>
+          <textarea id="description" rows="3" placeholder="例如：东侧围墙监控盲区，夜间无法看清" maxlength="200" required></textarea>
+        </div>
+        <p id="form-error" class="form-error" role="alert"></p>
+        <div class="form-actions">
+          <button type="submit" class="btn primary">保存记录</button>
+          <button type="button" id="sample" class="btn ghost">加载示例</button>
+        </div>
+      </form>
+
+      <section class="records-panel" aria-label="巡检记录列表">
+        <div class="records-head">
+          <div>
+            <h2>巡检记录</h2>
+            <p class="records-sub" id="records-sub">共 0 条</p>
+          </div>
+        </div>
+        <div class="filters">
+          <input id="search" type="search" placeholder="搜索学校、巡检人、问题" aria-label="搜索">
+          <select id="filter-severity" aria-label="按严重程度筛选">
+            <option value="">全部严重程度</option>
+            <option value="高">高</option>
+            <option value="中">中</option>
+            <option value="低">低</option>
+          </select>
+          <select id="filter-status" aria-label="按状态筛选">
+            <option value="">全部状态</option>
+            <option value="待处理">待处理</option>
+            <option value="处理中">处理中</option>
+            <option value="已闭环">已闭环</option>
+          </select>
+          <button id="clear-filters" class="btn ghost small" type="button">重置</button>
+        </div>
+        <div class="table-wrap">
+          <table class="records-table">
+            <thead>
+              <tr>
+                <th>日期</th>
+                <th>学校 / 项目</th>
+                <th>巡检人</th>
+                <th>问题</th>
+                <th>严重程度</th>
+                <th>状态</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id="records-body"></tbody>
+          </table>
+        </div>
+        <div id="empty" class="empty" hidden>
+          <p>还没有巡检记录。</p>
+          <p class="empty-sub">先在上面添加第一条，或点“加载示例”看看效果。</p>
+        </div>
+      </section>
+    </section>
+
+    <section class="ledger-notes">
+      <h2>怎么用</h2>
+      <ol>
+        <li>每次巡检完，当场用手机或电脑填一条，别等回办公室补。</li>
+        <li>“高风险”要当天处理；处理后把状态改成“已闭环”。</li>
+        <li>月底点“导出 CSV”，用 Excel 打开，做月度汇总。</li>
+        <li>这一版数据只存在当前浏览器里；换电脑或清缓存会丢，第 5 周会换成数据库。</li>
+      </ol>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <span>中安安防 · 校园安全服务</span>
+    <span>© 2026 中安安防</span>
+  </footer>
+
+  <script src="inspection.js"></script>
+</body>
+</html>

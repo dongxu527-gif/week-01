@@ -1,0 +1,105 @@
+.ledger-main { max-width: 1180px; margin: 0 auto; padding: 64px 28px 80px; }
+.ledger-head { display: flex; justify-content: space-between; align-items: flex-end; gap: 24px; margin-bottom: 32px; }
+.ledger-head h1 { font-size: clamp(34px, 4.6vw, 54px); letter-spacing: -.04em; }
+.ledger-head .lede { margin-top: 16px; max-width: 680px; }
+.ledger-actions { flex: none; }
+.btn.small { padding: 8px 12px; font-size: 12px; }
+
+.stats { display: grid; grid-template-columns: repeat(4, 1fr); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); margin-bottom: 28px; }
+.stat { padding: 16px 18px 16px 0; border-right: 1px solid var(--line); }
+.stat:last-child { border-right: 0; padding-right: 0; }
+.stat strong { display: block; font-size: 28px; line-height: 1.1; letter-spacing: -.03em; font-variant-numeric: tabular-nums; }
+.stat span { display: block; margin-top: 4px; font-size: 11px; color: var(--muted); letter-spacing: .04em; }
+
+.ledger-grid { display: grid; grid-template-columns: 370px minmax(0, 1fr); gap: 28px; align-items: start; }
+.form-card { border: 1px solid var(--line); background: var(--white); padding: 22px; }
+.form-card h2 { font-size: 20px; margin-bottom: 16px; }
+.field { margin-bottom: 12px; }
+.field label { display: block; font-size: 11px; color: var(--muted); margin-bottom: 5px; letter-spacing: .03em; }
+.field input, .field select, .field textarea {
+  width: 100%; padding: 9px 10px; border: 1px solid var(--line);
+  background: var(--paper); color: var(--ink); font: inherit; font-size: 13px;
+}
+.field textarea { resize: vertical; min-height: 74px; }
+.field input:focus, .field select:focus, .field textarea:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.form-actions { display: flex; gap: 8px; margin-top: 16px; }
+.form-error { color: #b42318; font-size: 12px; min-height: 17px; margin: 8px 0 0; }
+
+.records-panel { border: 1px solid var(--line); background: var(--white); min-width: 0; }
+.records-head { display: flex; justify-content: space-between; align-items: flex-end; gap: 16px; padding: 16px 18px 12px; }
+.records-head h2 { font-size: 20px; }
+.records-sub { margin: 3px 0 0; font-size: 11px; color: var(--muted); }
+.filters { display: flex; gap: 8px; flex-wrap: wrap; padding: 0 18px 14px; border-bottom: 1px solid var(--line); }
+.filters input, .filters select {
+  padding: 7px 9px; border: 1px solid var(--line); background: var(--paper);
+  color: var(--ink); font: inherit; font-size: 12px;
+}
+.filters input { flex: 1 1 180px; min-width: 0; }
+.filters select { flex: 0 0 auto; }
+.table-wrap { overflow-x: auto; }
+.records-table { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+.records-table th {
+  text-align: left; font-size: 9.5px; letter-spacing: .08em; text-transform: uppercase;
+  color: var(--muted); font-weight: 500; padding: 10px 12px; border-bottom: 1px solid var(--line-strong);
+  white-space: nowrap;
+}
+.records-table td { padding: 11px 12px; border-bottom: 1px solid var(--line); vertical-align: top; }
+.records-table th:nth-child(1), .records-table td:nth-child(1) { white-space: nowrap; }
+.records-table th:nth-child(3), .records-table td:nth-child(3) { white-space: nowrap; }
+.records-table td:nth-child(2) { min-width: 110px; }
+.records-table tr:last-child td { border-bottom: 0; }
+.records-table tr:hover td { background: #faf8f3; }
+.record-school { font-weight: 600; }
+.record-category { display: block; font-size: 10px; color: var(--muted); margin-top: 2px; }
+.record-desc { min-width: 180px; max-width: 280px; line-height: 1.55; }
+.badge { display: inline-block; padding: 2px 7px; border: 1px solid currentColor; font-size: 10.5px; line-height: 1.5; white-space: nowrap; }
+.sev-high { color: #b42318; background: #fef3f2; }
+.sev-medium { color: #b54708; background: #fffaeb; }
+.sev-low { color: #067647; background: #ecfdf3; }
+.status-open { color: #b42318; background: #fef3f2; }
+.status-progress { color: #175cd3; background: #eff8ff; }
+.status-closed { color: #067647; background: #ecfdf3; }
+.delete-btn { border: 1px solid var(--line); background: transparent; color: var(--muted); width: 26px; height: 26px; cursor: pointer; font-size: 15px; line-height: 1; }
+.delete-btn:hover { border-color: #b42318; color: #b42318; }
+.empty { padding: 46px 20px; text-align: center; color: var(--muted); }
+.empty p { margin: 0 0 6px; }
+.empty-sub { font-size: 12px; color: var(--muted); }
+.empty button { margin-top: 12px; }
+
+.ledger-notes { max-width: 760px; margin-top: 48px; padding-top: 28px; border-top: 1px solid var(--line); }
+.ledger-notes h2 { font-size: 22px; margin-bottom: 12px; }
+.ledger-notes ol { margin: 0; padding-left: 20px; color: var(--muted); font-size: 14px; line-height: 1.8; }
+
+.toast {
+  position: fixed; left: 50%; bottom: 24px; transform: translateX(-50%);
+  background: var(--navy); color: var(--white); padding: 9px 14px; font-size: 12px;
+  opacity: 0; pointer-events: none; transition: opacity .2s ease; z-index: 10;
+}
+.toast.show { opacity: 1; }
+
+@media (max-width: 900px) {
+  .ledger-main { padding: 48px 20px 60px; }
+  .ledger-head { align-items: flex-start; flex-direction: column; gap: 14px; }
+  .stats { grid-template-columns: 1fr 1fr; }
+  .stat { padding: 14px 12px 14px 0; }
+  .stat:nth-child(2) { border-right: 0; }
+  .stat:nth-child(1), .stat:nth-child(2) { border-bottom: 1px solid var(--line); }
+  .ledger-grid { grid-template-columns: 1fr; gap: 20px; }
+  .form-card { padding: 18px; }
+}
+
+@media (max-width: 700px) {
+  .filters input { flex-basis: 100%; }
+  .records-table thead { display: none; }
+  .records-table, .records-table tbody, .records-table tr, .records-table td { display: block; width: 100%; }
+  .records-table tr { border-bottom: 1px solid var(--line); padding: 10px 0; }
+  .records-table tr:last-child { border-bottom: 0; }
+  .records-table td { border: 0; padding: 4px 14px; display: flex; justify-content: space-between; gap: 12px; }
+  .records-table td::before { content: attr(data-label); color: var(--muted); font-size: 9.5px; letter-spacing: .06em; text-transform: uppercase; flex: none; padding-top: 2px; }
+  .records-table td.record-desc-cell { display: block; }
+  .records-table td.record-desc-cell::before { display: block; margin-bottom: 3px; }
+  .record-desc { max-width: none; }
+  .records-table td.action-cell { justify-content: flex-end; padding-top: 8px; }
+  .records-table td.action-cell::before { display: none; }
+}
