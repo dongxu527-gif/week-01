@@ -2,7 +2,8 @@
 .ledger-head { display: flex; justify-content: space-between; align-items: flex-end; gap: 24px; margin-bottom: 32px; }
 .ledger-head h1 { font-size: clamp(34px, 4.6vw, 54px); letter-spacing: -.04em; }
 .ledger-head .lede { margin-top: 16px; max-width: 680px; }
-.ledger-actions { flex: none; }
+.ledger-actions { flex: none; display: flex; gap: 8px; flex-wrap: wrap; }
+.file-btn { cursor: pointer; }
 .btn.small { padding: 8px 12px; font-size: 12px; }
 
 .stats { display: grid; grid-template-columns: repeat(4, 1fr); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); margin-bottom: 28px; }
@@ -60,6 +61,8 @@
 .status-open { color: #b42318; background: #fef3f2; }
 .status-progress { color: #175cd3; background: #eff8ff; }
 .status-closed { color: #067647; background: #ecfdf3; }
+.status-select { border: 1px solid currentColor; background: transparent; padding: 3px 6px; font: inherit; font-size: 10.5px; line-height: 1.5; cursor: pointer; }
+.status-select:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
 .delete-btn { border: 1px solid var(--line); background: transparent; color: var(--muted); width: 26px; height: 26px; cursor: pointer; font-size: 15px; line-height: 1; }
 .delete-btn:hover { border-color: #b42318; color: #b42318; }
 .empty { padding: 46px 20px; text-align: center; color: var(--muted); }

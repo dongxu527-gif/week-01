@@ -33,6 +33,10 @@
       </div>
       <div class="ledger-actions">
         <button id="export" class="btn ghost small" type="button">导出 CSV</button>
+        <button id="backup" class="btn ghost small" type="button">备份 JSON</button>
+        <label class="btn ghost small file-btn">导入备份
+          <input id="restore-file" type="file" accept=".json,application/json" hidden>
+        </label>
       </div>
     </section>
 
@@ -152,7 +156,7 @@
         <li>每次巡检完，当场用手机或电脑填一条，别等回办公室补。</li>
         <li>“高风险”要当天处理；处理后把状态改成“已闭环”。</li>
         <li>月底点“导出 CSV”，用 Excel 打开，做月度汇总。</li>
-        <li>这一版数据只存在当前浏览器里；换电脑或清缓存会丢，第 5 周会换成数据库。</li>
+        <li>这一版数据只存在当前浏览器里；换电脑或清缓存会丢。可以用上面的「备份 JSON / 导入备份」手动迁移，第 6 周会换成数据库。</li>
       </ol>
     </section>
   </main>

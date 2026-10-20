@@ -15,6 +15,8 @@
   const search = document.getElementById('search');
   const filterSeverity = document.getElementById('filter-severity');
   const filterStatus = document.getElementById('filter-status');
+  const backup = document.getElementById('backup');
+  const restoreFile = document.getElementById('restore-file');
   const toast = document.createElement('div');
   toast.className = 'toast';
   document.body.appendChild(toast);
@@ -33,10 +35,35 @@
     try {
       const raw = localStorage.getItem(STORAGE_KEY);
       const data = raw ? JSON.parse(raw) : [];
-      return Array.isArray(data) ? data : [];
+      const list = Array.isArray(data) ? data : (data && Array.isArray(data.records) ? data.records : []);
+      return list.map(normalizeRecord).filter(Boolean);
     } catch (err) {
       return [];
     }
+  }
+
+  function normalizeRecord(raw) {
+    if (!raw || typeof raw !== 'object') return null;
+    const schoolValue = String(raw.school || '').trim();
+    const dateValue = String(raw.date || '').slice(0, 10);
+    const inspectorValue = String(raw.inspector || '').trim();
+    const descriptionValue = String(raw.description || '').trim();
+    if (!schoolValue || !inspectorValue || descriptionValue.length < 4) return null;
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(dateValue)) return null;
+    const categories = ['门岗', '围墙', '监控', '消防', '照明', '其他'];
+    const severities = ['低', '中', '高'];
+    const statuses = ['待处理', '处理中', '已闭环'];
+    return {
+      id: raw.id ? String(raw.id) : uid(),
+      school: schoolValue,
+      date: dateValue,
+      inspector: inspectorValue,
+      category: categories.includes(raw.category) ? raw.category : '其他',
+      severity: severities.includes(raw.severity) ? raw.severity : '中',
+      status: statuses.includes(raw.status) ? raw.status : '待处理',
+      description: descriptionValue,
+      createdAt: raw.createdAt ? String(raw.createdAt) : new Date().toISOString()
+    };
   }
 
   function saveRecords() {
@@ -84,6 +111,13 @@
     if (value === '待处理') return 'status-open';
     if (value === '处理中') return 'status-progress';
     return 'status-closed';
+  }
+
+  function statusSelect(record) {
+    const options = ['待处理', '处理中', '已闭环'].map(function (value) {
+      return '<option value="' + value + '"' + (value === record.status ? ' selected' : '') + '>' + value + '</option>';
+    }).join('');
+    return '<select class="status-select ' + statusClass(record.status) + '" data-id="' + escapeHtml(record.id) + '" aria-label="修改状态">' + options + '</select>';
   }
 
   function filteredRecords() {
@@ -135,7 +169,7 @@
         '<td data-label="巡检人">' + escapeHtml(record.inspector) + '</td>' +
         '<td data-label="问题" class="record-desc-cell"><span class="record-desc">' + escapeHtml(record.description) + '</span></td>' +
         '<td data-label="严重程度"><span class="badge ' + severityClass(record.severity) + '">' + escapeHtml(record.severity) + '</span></td>' +
-        '<td data-label="状态"><span class="badge ' + statusClass(record.status) + '">' + escapeHtml(record.status) + '</span></td>' +
+        '<td data-label="状态">' + statusSelect(record) + '</td>' +
         '<td class="action-cell"><button class="delete-btn" type="button" data-id="' + escapeHtml(record.id) + '" aria-label="删除这条记录">×</button></td>';
       recordsBody.appendChild(tr);
     });
@@ -198,6 +232,20 @@
     }
   });
 
+  recordsBody.addEventListener('change', function (event) {
+    const select = event.target.closest('.status-select');
+    if (!select) return;
+    const id = select.getAttribute('data-id');
+    const record = records.find(function (item) { return item.id === id; });
+    if (!record) return;
+    record.status = select.value;
+    if (saveRecords()) {
+      updateStats();
+      render();
+      showToast('状态已更新');
+    }
+  });
+
   search.addEventListener('input', render);
   filterSeverity.addEventListener('change', render);
   filterStatus.addEventListener('change', render);
@@ -247,6 +295,66 @@
       refresh();
       showToast('已加载 3 条示例记录');
     }
+  });
+
+  function downloadFile(content, filename, mimeType) {
+    const blob = new Blob([content], { type: mimeType });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = filename;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+  }
+
+  backup.addEventListener('click', function () {
+    if (!records.length) {
+      showToast('没有可备份的记录');
+      return;
+    }
+    const payload = {
+      version: 1,
+      exportedAt: new Date().toISOString(),
+      records: records
+    };
+    downloadFile(JSON.stringify(payload, null, 2), '巡检台账备份-' + todayValue() + '.json', 'application/json;charset=utf-8');
+    showToast('备份文件已导出');
+  });
+
+  restoreFile.addEventListener('change', function (event) {
+    const file = event.target.files && event.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = function () {
+      try {
+        const data = JSON.parse(String(reader.result || ''));
+        const incoming = Array.isArray(data) ? data : (data && Array.isArray(data.records) ? data.records : []);
+        const normalized = incoming.map(normalizeRecord).filter(Boolean);
+        if (!normalized.length) {
+          showToast('导入失败：没有有效记录');
+          return;
+        }
+        const existing = new Set(records.map(function (record) { return record.id; }));
+        const additions = normalized.filter(function (record) { return !existing.has(record.id); });
+        if (!additions.length) {
+          showToast('没有新增记录（可能已导入过）');
+          return;
+        }
+        if (!window.confirm('导入 ' + additions.length + ' 条记录？将与现有记录合并。')) return;
+        records = records.concat(additions);
+        if (saveRecords()) {
+          refresh();
+          showToast('已导入 ' + additions.length + ' 条记录');
+        }
+      } catch (err) {
+        showToast('导入失败：文件不是有效的 JSON');
+      } finally {
+        restoreFile.value = '';
+      }
+    };
+    reader.readAsText(file, 'utf-8');
   });
 
   document.getElementById('export').addEventListener('click', function () {
