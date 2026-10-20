@@ -15,7 +15,7 @@
 
   function nextPage() {
     const next = new URLSearchParams(window.location.search).get('next');
-    return ['inspection.html', 'proposal.html'].includes(next) ? next : 'inspection.html';
+    return ['inspection.html', 'proposal.html', 'knowledge.html'].includes(next) ? next : 'inspection.html';
   }
 
   form.addEventListener('submit', async function (event) {

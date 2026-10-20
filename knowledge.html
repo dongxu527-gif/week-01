@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>投标与制度知识问答 · 中安安防</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="knowledge.css">
+</head>
+<body>
+  <header class="nav">
+    <a class="brand" href="index.html">
+      <span class="brand-mark">中</span>
+      <span class="brand-text">中安安防<small>ZHONGAN SECURITY</small></span>
+    </a>
+    <nav class="nav-links">
+      <a href="index.html#services">服务</a>
+      <a href="index.html#scenarios">场景</a>
+      <a href="index.html#advantages">优势</a>
+      <a href="quote.html">报价</a>
+      <a href="proposal.html">方案</a>
+      <a href="knowledge.html" aria-current="page">知识</a>
+      <a href="inspection.html">台账</a>
+      <a href="index.html#contact">联系</a>
+    </nav>
+    <a class="nav-cta" href="quote.html">立即报价</a>
+  </header>
+
+  <main class="knowledge-main">
+    <section class="knowledge-head">
+      <div>
+        <p class="eyebrow">内部知识库</p>
+        <h1>投标与制度问答</h1>
+        <p class="lede">把公司简介、资质、制度、案例放进来。提问时先从资料里找依据，再让 AI 回答并标来源。</p>
+      </div>
+      <div class="head-actions">
+        <span id="user-email" class="user-email"></span>
+        <button id="logout" class="btn ghost small" type="button">退出登录</button>
+      </div>
+    </section>
+
+    <section class="knowledge-grid">
+      <aside class="docs-panel">
+        <div class="panel-head">
+          <h2>知识库文档</h2>
+          <span id="doc-count" class="doc-count">0 篇</span>
+        </div>
+
+        <form id="doc-form" class="doc-form" novalidate>
+          <div class="field">
+            <label for="doc-title">文档标题</label>
+            <input id="doc-title" type="text" placeholder="例如：公司资质清单" maxlength="60" required>
+          </div>
+          <div class="field">
+            <label for="doc-content">文档内容</label>
+            <textarea id="doc-content" rows="7" placeholder="把制度、资质、案例或投标素材粘贴到这里。段落之间空一行，检索效果更好。" required></textarea>
+          </div>
+          <div class="doc-form-actions">
+            <label class="btn ghost small file-btn">上传 .txt / .md
+              <input id="doc-file" type="file" accept=".txt,.md,text/plain,text/markdown" hidden>
+            </label>
+            <button id="doc-save" type="submit" class="btn primary small">保存文档</button>
+          </div>
+          <p id="doc-error" class="form-error" role="alert"></p>
+        </form>
+
+        <div class="doc-list-head">
+          <span>已收录</span>
+          <button id="refresh-docs" class="text-btn" type="button">刷新</button>
+        </div>
+        <div id="doc-list" class="doc-list">
+          <p class="empty-small">还没有文档，先添加第一篇。</p>
+        </div>
+      </aside>
+
+      <section class="chat-panel">
+        <div class="chat-head">
+          <div>
+            <p class="eyebrow">问答</p>
+            <h2>问公司资料</h2>
+          </div>
+          <span class="chat-hint">只根据知识库回答</span>
+        </div>
+
+        <div id="messages" class="messages">
+          <div class="message assistant">
+            <p>先把制度、资质或案例加到左边，然后在这里提问。例如：</p>
+            <ul>
+              <li>公司有哪些校园安保相关资质？</li>
+              <li>投标文件里通常要放哪些案例材料？</li>
+              <li>巡检发现问题后的上报流程是什么？</li>
+            </ul>
+          </div>
+        </div>
+
+        <form id="ask-form" class="ask-form" novalidate>
+          <input id="question" type="text" placeholder="输入问题，例如：公司有哪些资质？" maxlength="300" autocomplete="off">
+          <button id="ask-btn" type="submit" class="btn primary">提问</button>
+        </form>
+        <p id="ask-error" class="form-error" role="alert"></p>
+      </section>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <span>中安安防 · 校园安全服务</span>
+    <span>© 2026 中安安防</span>
+  </footer>
+
+  <script src="vendor/supabase.js"></script>
+  <script src="supabase-config.js"></script>
+  <script src="knowledge.js"></script>
+</body>
+</html>
