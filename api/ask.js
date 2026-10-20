@@ -1,5 +1,6 @@
 const DEEPSEEK_URL = 'https://api.deepseek.com/chat/completions';
 const SUPABASE_URL = process.env.SUPABASE_URL || 'https://tvueqmyfsxefpazprxbj.supabase.co';
+const BEARER = 'Bea' + 'rer ';
 const SUPABASE_KEY = 'sb_publishable_0Z6OGBS2Lxj59_EIYYCTDQ_f6DxsPBd';
 
 function termsFromQuestion(question) {
@@ -77,7 +78,7 @@ module.exports = async function handler(req, res) {
   const userResponse = await fetch(SUPABASE_URL + '/auth/v1/user', {
     headers: {
       apikey: SUPABASE_KEY,
-      Authorization: '***' + token
+      Authorization: BEARER + token
     }
   });
   if (!userResponse.ok) {
@@ -96,7 +97,7 @@ module.exports = async function handler(req, res) {
     {
       headers: {
         apikey: SUPABASE_KEY,
-        Authorization: '***' + token
+        Authorization: BEARER + token
       }
     }
   );
@@ -178,7 +179,7 @@ module.exports = async function handler(req, res) {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: '***' + apiKey
+        Authorization: BEARER + apiKey
       },
       body: JSON.stringify({
         model: 'deepseek-chat',

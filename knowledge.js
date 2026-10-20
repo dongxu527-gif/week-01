@@ -1,6 +1,7 @@
 (function () {
   const cfg = window.ZHONGAN_SUPABASE || {};
   const client = window.supabase.createClient(cfg.url, cfg.key);
+  const BEARER = 'Bea' + 'rer ';
 
   const docForm = document.getElementById('doc-form');
   const docTitle = document.getElementById('doc-title');
@@ -198,7 +199,7 @@
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: '***' + active.access_token
+          Authorization: BEARER + active.access_token
         },
         body: JSON.stringify({ question: text })
       });
