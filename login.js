@@ -9,9 +9,14 @@
 
   client.auth.getSession().then(function (result) {
     if (result.data && result.data.session) {
-      window.location.replace('inspection.html');
+      window.location.replace(nextPage());
     }
   });
+
+  function nextPage() {
+    const next = new URLSearchParams(window.location.search).get('next');
+    return ['inspection.html', 'proposal.html'].includes(next) ? next : 'inspection.html';
+  }
 
   form.addEventListener('submit', async function (event) {
     event.preventDefault();
@@ -39,6 +44,6 @@
       return;
     }
 
-    window.location.replace('inspection.html');
+    window.location.replace(nextPage());
   });
 })();

@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>校园安保方案生成器 · 中安安防</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="proposal.css">
+</head>
+<body>
+  <header class="nav">
+    <a class="brand" href="index.html">
+      <span class="brand-mark">中</span>
+      <span class="brand-text">中安安防<small>ZHONGAN SECURITY</small></span>
+    </a>
+    <nav class="nav-links">
+      <a href="index.html#services">服务</a>
+      <a href="index.html#scenarios">场景</a>
+      <a href="index.html#advantages">优势</a>
+      <a href="quote.html">报价</a>
+      <a href="proposal.html" aria-current="page">方案</a>
+      <a href="inspection.html">台账</a>
+      <a href="index.html#contact">联系</a>
+    </nav>
+    <a class="nav-cta" href="quote.html">立即报价</a>
+  </header>
+
+  <main class="proposal-main">
+    <section class="proposal-head">
+      <div>
+        <p class="eyebrow">AI 方案助手</p>
+        <h1>校园安保方案生成器</h1>
+        <p class="lede">填学校情况，生成一份可修改的方案初稿。配置 API Key 后由大模型生成；没配置时先用本地模板。</p>
+      </div>
+      <div class="head-actions">
+        <span id="ai-status" class="ai-status">等待生成</span>
+        <span id="user-email" class="user-email"></span>
+        <button id="logout" class="btn ghost small" type="button">退出登录</button>
+      </div>
+    </section>
+
+    <section class="proposal-grid">
+      <form id="proposal-form" class="proposal-form" novalidate>
+        <div class="form-head">
+          <h2>学校信息</h2>
+          <button id="sample" class="btn ghost small" type="button">填入示例</button>
+        </div>
+
+        <div class="field">
+          <label for="school">学校名称</label>
+          <input id="school" type="text" placeholder="例如：郑州实验小学" maxlength="40" required>
+        </div>
+
+        <div class="field-row">
+          <div class="field">
+            <label for="type">学校类型</label>
+            <select id="type">
+              <option value="小学">小学</option>
+              <option value="中学">中学</option>
+              <option value="职业学校">职业学校</option>
+              <option value="其他">其他</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="students">学生人数</label>
+            <input id="students" type="number" min="0" step="1" placeholder="例如：1800" inputmode="numeric">
+          </div>
+        </div>
+
+        <div class="field-row">
+          <div class="field">
+            <label for="area">占地面积（㎡）</label>
+            <input id="area" type="number" min="0" step="100" placeholder="例如：22000" inputmode="numeric">
+          </div>
+          <div class="field">
+            <label for="entrances">出入口数量</label>
+            <input id="entrances" type="number" min="0" step="1" placeholder="例如：3" inputmode="numeric">
+          </div>
+        </div>
+
+        <div class="field">
+          <label>重点风险（可多选）</label>
+          <div class="checks">
+            <label><input type="checkbox" name="risk" value="上下学人流"> 上下学人流</label>
+            <label><input type="checkbox" name="risk" value="围墙盲区"> 围墙盲区</label>
+            <label><input type="checkbox" name="risk" value="宿舍区"> 宿舍区</label>
+            <label><input type="checkbox" name="risk" value="消防"> 消防</label>
+            <label><input type="checkbox" name="risk" value="监控盲区"> 监控盲区</label>
+            <label><input type="checkbox" name="risk" value="夜间巡逻"> 夜间巡逻</label>
+            <label><input type="checkbox" name="risk" value="人员进出"> 人员进出</label>
+          </div>
+        </div>
+
+        <div class="field-row">
+          <div class="field">
+            <label for="scope">服务范围</label>
+            <select id="scope">
+              <option value="人防 + 机器人">人防 + 机器人</option>
+              <option value="只做人防">只做人防</option>
+              <option value="只做机器人">只做机器人</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="style">输出风格</label>
+            <select id="style">
+              <option value="正式方案">正式方案</option>
+              <option value="简洁汇报">简洁汇报</option>
+            </select>
+          </div>
+        </div>
+
+        <p id="form-error" class="form-error" role="alert"></p>
+        <button id="generate" type="submit" class="btn primary full">生成方案初稿</button>
+        <p class="form-note">AI 生成的内容需要你审核后再发给客户；不要直接承诺价格、资质或效果。</p>
+      </form>
+
+      <section class="proposal-output" aria-live="polite">
+        <div class="output-head">
+          <div>
+            <p class="eyebrow">方案初稿</p>
+            <h2>生成结果</h2>
+          </div>
+          <div class="output-actions">
+            <button id="copy" class="btn ghost small" type="button" disabled>复制</button>
+            <button id="download" class="btn ghost small" type="button" disabled>下载 Markdown</button>
+          </div>
+        </div>
+        <div id="output" class="output-body">
+          <p class="empty">左侧填学校信息，点“生成方案初稿”。<br>生成后可以复制，也可以下载 Markdown 再改。</p>
+        </div>
+      </section>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <span>中安安防 · 校园安全服务</span>
+    <span>© 2026 中安安防</span>
+  </footer>
+
+  <script src="vendor/supabase.js"></script>
+  <script src="supabase-config.js"></script>
+  <script src="proposal.js"></script>
+</body>
+</html>
