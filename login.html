@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>登录 · 中安安防巡检台账</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="login.css">
+</head>
+<body>
+  <header class="nav">
+    <a class="brand" href="index.html">
+      <span class="brand-mark">中</span>
+      <span class="brand-text">中安安防<small>ZHONGAN SECURITY</small></span>
+    </a>
+    <a class="nav-cta" href="index.html">返回首页</a>
+  </header>
+
+  <main class="login-main">
+    <section class="login-card">
+      <p class="eyebrow">内部工具</p>
+      <h1>登录巡检台账</h1>
+      <p class="lede">只有登录用户能查看和修改巡检记录。</p>
+
+      <form id="login-form" novalidate>
+        <div class="field">
+          <label for="email">邮箱</label>
+          <input id="email" type="email" autocomplete="username" placeholder="name@example.com" required>
+        </div>
+        <div class="field">
+          <label for="password">密码</label>
+          <input id="password" type="password" autocomplete="current-password" placeholder="请输入密码" required>
+        </div>
+        <p id="login-error" class="login-error" role="alert"></p>
+        <button id="login-btn" type="submit" class="btn primary full">登录</button>
+      </form>
+
+      <p class="login-note">账号由管理员开通。忘记密码或需要新账号，请联系管理员。</p>
+      <p class="login-back"><a href="inspection.html">返回台账</a></p>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <span>中安安防 · 校园安全服务</span>
+    <span>© 2026 中安安防</span>
+  </footer>
+
+  <script src="vendor/supabase.js"></script>
+  <script src="supabase-config.js"></script>
+  <script src="login.js"></script>
+</body>
+</html>

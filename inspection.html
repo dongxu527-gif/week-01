@@ -32,11 +32,14 @@
         <p class="lede">把每天的巡检记录留下来：问题有记录、有跟进、月底能导出。先给一个学校或一个项目用，跑顺了再推广。</p>
       </div>
       <div class="ledger-actions">
+        <span id="user-email" class="user-email"></span>
         <button id="export" class="btn ghost small" type="button">导出 CSV</button>
         <button id="backup" class="btn ghost small" type="button">备份 JSON</button>
         <label class="btn ghost small file-btn">导入备份
           <input id="restore-file" type="file" accept=".json,application/json" hidden>
         </label>
+        <button id="migrate" class="btn ghost small" type="button" hidden>导入本地旧数据</button>
+        <button id="logout" class="btn ghost small" type="button">退出登录</button>
       </div>
     </section>
 
@@ -166,6 +169,8 @@
     <span>© 2026 中安安防</span>
   </footer>
 
+  <script src="vendor/supabase.js"></script>
+  <script src="supabase-config.js"></script>
   <script src="inspection.js"></script>
 </body>
 </html>

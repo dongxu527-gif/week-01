@@ -1,0 +1,15 @@
+.login-main { min-height: calc(100vh - 180px); display: grid; place-items: center; padding: 60px 20px; }
+.login-card { width: min(100%, 420px); border: 1px solid var(--line); background: var(--white); padding: 32px; }
+.login-card h1 { font-size: clamp(30px, 4vw, 42px); letter-spacing: -.03em; }
+.login-card .lede { margin: 14px 0 24px; font-size: 14px; }
+.login-card .field { margin-bottom: 14px; }
+.login-card .field label { display: block; font-size: 11px; color: var(--muted); margin-bottom: 5px; }
+.login-card .field input {
+  width: 100%; padding: 10px 12px; border: 1px solid var(--line);
+  background: var(--paper); color: var(--ink); font: inherit; font-size: 14px;
+}
+.login-card .field input:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
+.login-error { color: #b42318; font-size: 12px; min-height: 18px; margin: 4px 0 12px; }
+.login-note { color: var(--muted); font-size: 11.5px; line-height: 1.6; margin: 18px 0 0; }
+.login-back { margin: 12px 0 0; font-size: 12px; }
+.login-back a { color: var(--muted); }
