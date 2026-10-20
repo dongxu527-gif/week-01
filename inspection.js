@@ -480,7 +480,7 @@
     const result = await client.auth.getSession();
     const current = result.data && result.data.session;
     if (!current) {
-      window.location.replace('login.html');
+      window.location.replace('login.html?next=inspection.html');
       return;
     }
     session = current;
