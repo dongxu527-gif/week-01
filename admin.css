@@ -74,3 +74,8 @@
   .admin-grid { grid-template-columns: 1fr; }
   .field-row { grid-template-columns: 1fr; }
 }
+
+.audit-panel { margin-top: 24px; }
+.audit-create { color: #067647; background: #ecfdf3; }
+.audit-update { color: #b54708; background: #fffaeb; }
+.audit-delete { color: #b42318; background: #fef3f2; }

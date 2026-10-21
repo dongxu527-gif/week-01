@@ -20,6 +20,7 @@
   let docsCount = 0;
   let members = [];
   let editingSchoolId = null;
+  let auditLogs = [];
 
   function setText(id, value) {
     document.getElementById(id).textContent = value;
@@ -69,7 +70,8 @@
       client.from('schools').select('*').order('created_at', { ascending: false }),
       client.from('inspection_records').select('*').order('inspection_date', { ascending: false }).limit(500),
       client.from('knowledge_documents').select('id', { count: 'exact', head: true }),
-      client.from('profiles').select('id,email,role,created_at').order('created_at', { ascending: true })
+      client.from('profiles').select('id,email,role,created_at').order('created_at', { ascending: true }),
+      client.from('audit_logs').select('*').order('created_at', { ascending: false }).limit(30)
     ]);
 
     for (let i = 0; i < results.length; i += 1) {
@@ -83,6 +85,7 @@
     inspections = results[1].data || [];
     docsCount = results[2].count || 0;
     members = results[3].data || [];
+    auditLogs = results[4].data || [];
     return true;
   }
 
@@ -184,6 +187,53 @@
     });
   }
 
+  function renderAudit() {
+    const body = document.getElementById('audit-body');
+    const empty = document.getElementById('audit-empty');
+    const labels = { create: '新增', update: '修改', delete: '删除' };
+    const tableLabels = {
+      inspection_records: '巡检记录',
+      knowledge_documents: '知识库文档',
+      schools: '学校',
+      quotes: '报价',
+      proposals: '方案',
+      profiles: '成员'
+    };
+    body.innerHTML = '';
+
+    if (!auditLogs.length) {
+      empty.hidden = false;
+      return;
+    }
+    empty.hidden = true;
+
+    auditLogs.forEach(function (log) {
+      const tr = document.createElement('tr');
+      const time = document.createElement('td');
+      if (log.created_at) {
+        const date = new Date(log.created_at);
+        time.textContent = date.toLocaleString('zh-CN', {
+          year: 'numeric', month: '2-digit', day: '2-digit',
+          hour: '2-digit', minute: '2-digit', hour12: false
+        }).replace(/\//g, '-');
+      }
+      const action = document.createElement('td');
+      const badge = document.createElement('span');
+      badge.className = 'badge audit-' + (log.action || 'update');
+      badge.textContent = labels[log.action] || log.action;
+      action.appendChild(badge);
+      const object = document.createElement('td');
+      object.textContent = (tableLabels[log.table_name] || log.table_name) + ' · ' + (log.record_id || '').slice(0, 8);
+      const who = document.createElement('td');
+      who.textContent = log.user_email || '系统';
+      tr.appendChild(time);
+      tr.appendChild(action);
+      tr.appendChild(object);
+      tr.appendChild(who);
+      body.appendChild(tr);
+    });
+  }
+
   function renderMembers() {
     const body = document.getElementById('members-body');
     body.innerHTML = '';
@@ -211,6 +261,18 @@
       .replace(/'/g, '&#039;');
   }
 
+  function downloadFile(content, filename, mimeType) {
+    const blob = new Blob([content], { type: mimeType });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = filename;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+  }
+
   async function refreshAll() {
     loading.hidden = false;
     dashboard.hidden = true;
@@ -225,6 +287,7 @@
     renderSchools();
     renderHighRisk();
     renderMembers();
+    renderAudit();
   }
 
   document.getElementById('school-form').addEventListener('submit', async function (event) {
@@ -305,6 +368,35 @@
 
   schoolSearch.addEventListener('input', renderSchools);
   schoolCancel.addEventListener('click', resetSchoolForm);
+
+  document.getElementById('full-backup').addEventListener('click', async function () {
+    const button = this;
+    button.disabled = true;
+    button.textContent = '备份中…';
+    const tables = ['schools', 'inspection_records', 'knowledge_documents', 'quotes', 'proposals', 'profiles', 'audit_logs'];
+    const results = await Promise.all(tables.map(function (table) {
+      return client.from(table).select('*').limit(10000);
+    }));
+    const failed = results.find(function (result) { return result.error; });
+    if (failed) {
+      button.disabled = false;
+      button.textContent = '全量备份';
+      window.alert('备份失败：' + failed.error.message);
+      return;
+    }
+    const payload = {
+      version: 1,
+      exported_at: new Date().toISOString(),
+      tables: {}
+    };
+    tables.forEach(function (table, index) {
+      payload.tables[table] = results[index].data || [];
+    });
+    const date = new Date().toISOString().slice(0, 10);
+    downloadFile(JSON.stringify(payload, null, 2), '中安安防全量备份-' + date + '.json', 'application/json;charset=utf-8');
+    button.disabled = false;
+    button.textContent = '全量备份';
+  });
 
   refresh.addEventListener('click', refreshAll);
   logout.addEventListener('click', async function () {

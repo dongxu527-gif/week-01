@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="robots" content="noindex,nofollow">
   <title>项目管理后台 · 中安安防</title>
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="admin.css">
 </head>
@@ -38,6 +39,7 @@
       <div class="head-actions">
         <span id="user-email" class="user-email"></span>
         <a class="btn ghost small" href="runbook.html">运行手册</a>
+        <button id="full-backup" class="btn ghost small" type="button">全量备份</button>
         <button id="refresh" class="btn ghost small" type="button">刷新</button>
         <button id="logout" class="btn ghost small" type="button">退出登录</button>
       </div>
@@ -166,6 +168,24 @@
             <tbody id="members-body"></tbody>
           </table>
         </div>
+      </section>
+
+      <section class="panel audit-panel">
+        <div class="panel-head">
+          <div>
+            <h2>最近操作</h2>
+            <p class="panel-sub">数据库自动记录：谁在什么时候新增、修改或删除了什么。</p>
+          </div>
+        </div>
+        <div class="table-wrap">
+          <table class="admin-table">
+            <thead>
+              <tr><th>时间</th><th>动作</th><th>对象</th><th>操作人</th></tr>
+            </thead>
+            <tbody id="audit-body"></tbody>
+          </table>
+        </div>
+        <div id="audit-empty" class="empty-small" hidden>还没有操作记录。</div>
       </section>
     </div>
   </main>
