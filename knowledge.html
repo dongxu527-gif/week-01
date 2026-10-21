@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex,nofollow">
   <title>投标与制度知识问答 · 中安安防</title>
   <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="knowledge.css">
@@ -44,7 +45,10 @@
       <aside class="docs-panel">
         <div class="panel-head">
           <h2>知识库文档</h2>
-          <span id="doc-count" class="doc-count">0 篇</span>
+          <div class="panel-actions">
+            <span id="doc-count" class="doc-count">0 篇</span>
+            <button id="export-docs" class="btn ghost small" type="button">导出全部</button>
+          </div>
         </div>
 
         <form id="doc-form" class="doc-form" novalidate>

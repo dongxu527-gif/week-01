@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+Disallow: /admin.html
+Disallow: /inspection.html
+Disallow: /knowledge.html
+Disallow: /proposal.html
+Disallow: /login.html

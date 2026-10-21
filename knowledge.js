@@ -56,6 +56,19 @@
     return el;
   }
 
+
+  function downloadFile(content, filename, mimeType) {
+    const blob = new Blob([content], { type: mimeType });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = filename;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+  }
+
   async function loadDocuments() {
     const result = await client
       .from('knowledge_documents')
@@ -227,6 +240,20 @@
       askBtn.disabled = false;
       askBtn.textContent = '提问';
     }
+  });
+
+
+  document.getElementById('export-docs').addEventListener('click', function () {
+    if (!documents.length) {
+      window.alert('知识库还没有文档。');
+      return;
+    }
+    const payload = {
+      version: 1,
+      exportedAt: new Date().toISOString(),
+      documents: documents
+    };
+    downloadFile(JSON.stringify(payload, null, 2), '知识库备份-' + new Date().toISOString().slice(0, 10) + '.json', 'application/json;charset=utf-8');
   });
 
   logout.addEventListener('click', async function () {
