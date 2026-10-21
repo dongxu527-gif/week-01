@@ -260,7 +260,7 @@ h3 { font-size: 20px; font-weight: 700; }
   gap: 4px;
 }
 .nav-tools-toggle:hover { color: var(--ink); }
-.nav-tools-toggle::after { content: "▾"; font-size: 9px; line-height: 1; }
+.nav-tools-toggle::after { content: ""; width: 0; height: 0; border-left: 3px solid transparent; border-right: 3px solid transparent; border-top: 4px solid currentColor; margin-left: 4px; }
 .nav-tools-menu {
   display: none;
   position: absolute;
