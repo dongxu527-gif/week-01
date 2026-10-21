@@ -15,11 +15,19 @@
   const generateBtn = document.getElementById('generate');
   const copyBtn = document.getElementById('copy');
   const downloadBtn = document.getElementById('download');
+  const saveProposalBtn = document.getElementById('save-proposal');
+  const wordBtn = document.getElementById('download-word');
+  const toggleEditBtn = document.getElementById('toggle-edit');
+  const editor = document.getElementById('markdown-editor');
+  const historySection = document.getElementById('proposal-history');
+  const historyList = document.getElementById('proposal-history-list');
+  const historyCount = document.getElementById('proposal-history-count');
   const userEmail = document.getElementById('user-email');
   const logout = document.getElementById('logout');
 
   let currentMarkdown = '';
   let session = null;
+  let editing = false;
 
   function escapeHtml(value) {
     return String(value)
@@ -181,10 +189,123 @@
 
   function setOutput(markdown, notice) {
     currentMarkdown = markdown;
+    editing = false;
+    editor.hidden = true;
+    output.hidden = false;
     const noticeHtml = notice ? '<div class="notice">' + escapeHtml(notice) + '</div>' : '';
     output.innerHTML = noticeHtml + renderMarkdown(markdown);
     copyBtn.disabled = false;
     downloadBtn.disabled = false;
+    saveProposalBtn.disabled = false;
+    wordBtn.disabled = false;
+    toggleEditBtn.disabled = false;
+    toggleEditBtn.textContent = '编辑 Markdown';
+  }
+
+  function setEditing(value) {
+    if (!currentMarkdown) return;
+    if (value) {
+      editor.value = currentMarkdown;
+      editor.hidden = false;
+      output.hidden = true;
+      editing = true;
+      toggleEditBtn.textContent = '预览修改';
+    } else {
+      if (editor.value.trim()) currentMarkdown = editor.value;
+      output.innerHTML = renderMarkdown(currentMarkdown);
+      output.hidden = false;
+      editor.hidden = true;
+      editing = false;
+      toggleEditBtn.textContent = '编辑 Markdown';
+    }
+  }
+
+  function downloadBlob(content, filename, mimeType) {
+    const blob = new Blob([content], { type: mimeType });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = filename;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+  }
+
+  async function loadHistory() {
+    if (!session) {
+      historySection.hidden = true;
+      return;
+    }
+    const result = await client
+      .from('proposals')
+      .select('id,school,school_type,students,area,entrances,risks,scope,style,content,created_at')
+      .order('created_at', { ascending: false })
+      .limit(20);
+    if (result.error) {
+      historySection.hidden = true;
+      return;
+    }
+    historySection.hidden = false;
+    renderHistory(result.data || []);
+  }
+
+  function renderHistory(list) {
+    historyCount.textContent = list.length ? '最近 ' + list.length + ' 份' : '';
+    historyList.innerHTML = '';
+    if (!list.length) {
+      const empty = document.createElement('p');
+      empty.className = 'history-empty';
+      empty.textContent = '还没有保存过方案。';
+      historyList.appendChild(empty);
+      return;
+    }
+
+    list.forEach(function (item) {
+      const row = document.createElement('div');
+      row.className = 'history-item';
+
+      const date = document.createElement('span');
+      date.className = 'history-date';
+      date.textContent = String(item.created_at || '').slice(0, 10);
+
+      const info = document.createElement('div');
+      const name = document.createElement('span');
+      name.className = 'history-customer';
+      name.textContent = item.school || '未命名学校';
+      const meta = document.createElement('span');
+      meta.className = 'history-meta';
+      meta.textContent = (item.school_type || '学校') + ' · ' + (item.students ? item.students + ' 人' : '人数未填');
+      info.appendChild(name);
+      info.appendChild(meta);
+
+      const load = document.createElement('button');
+      load.type = 'button';
+      load.className = 'history-load';
+      load.textContent = '载入';
+      load.addEventListener('click', function () {
+        school.value = item.school || '';
+        type.value = item.school_type || '小学';
+        students.value = item.students || '';
+        area.value = item.area || '';
+        entrances.value = item.entrances || '';
+        scope.value = item.scope || '人防 + 机器人';
+        style.value = item.style || '正式方案';
+        let risks = [];
+        try { risks = JSON.parse(item.risks || '[]'); } catch (err) { risks = []; }
+        document.querySelectorAll('input[name="risk"]').forEach(function (input) {
+          input.checked = Array.isArray(risks) && risks.includes(input.value);
+        });
+        setOutput(item.content || '', '');
+        setStatus('已载入', 'ai');
+        output.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+
+      row.appendChild(date);
+      row.appendChild(info);
+      row.appendChild(load);
+      historyList.appendChild(row);
+    });
   }
 
   function fillSample() {
@@ -286,6 +407,56 @@
     URL.revokeObjectURL(url);
   });
 
+  saveProposalBtn.addEventListener('click', async function () {
+    if (editing) currentMarkdown = editor.value;
+    if (!currentMarkdown) return;
+    const data = getData();
+    if (!data.school) {
+      formError.textContent = '请先填写学校名称再保存。';
+      school.focus();
+      return;
+    }
+
+    saveProposalBtn.disabled = true;
+    saveProposalBtn.textContent = '保存中…';
+    const result = await client.from('proposals').insert({
+      school: data.school,
+      school_type: data.type,
+      students: data.students || null,
+      area: data.area || null,
+      entrances: data.entrances || null,
+      risks: JSON.stringify(data.risks),
+      scope: data.scope,
+      style: data.style,
+      content: currentMarkdown
+    });
+    saveProposalBtn.disabled = false;
+    saveProposalBtn.textContent = '保存方案';
+
+    if (result.error) {
+      formError.textContent = '保存失败：' + result.error.message;
+      return;
+    }
+    formError.textContent = '';
+    setStatus('已保存', 'ai');
+    await loadHistory();
+  });
+
+  wordBtn.addEventListener('click', function () {
+    if (editing) currentMarkdown = editor.value;
+    if (!currentMarkdown) return;
+    const html = '<!DOCTYPE html><html><head><meta charset="utf-8"><style>' +
+      'body{font-family:"Songti SC","STSong",serif;font-size:14pt;line-height:1.8;color:#111;margin:32pt;}' +
+      'h2{font-size:18pt;margin:20pt 0 8pt;}h3{font-size:15pt;margin:14pt 0 6pt;}' +
+      'p{margin:0 0 8pt;}ul,ol{margin:0 0 10pt;padding-left:22pt;}li{margin-bottom:4pt;}' +
+      '</style></head><body>' + renderMarkdown(currentMarkdown) + '</body></html>';
+    downloadBlob(html, '校园安保方案-' + (school.value.trim() || '初稿') + '.doc', 'application/msword;charset=utf-8');
+  });
+
+  toggleEditBtn.addEventListener('click', function () {
+    setEditing(!editing);
+  });
+
   logout.addEventListener('click', async function () {
     await client.auth.signOut();
     window.location.replace('login.html');
@@ -300,6 +471,7 @@
     }
     session = active;
     userEmail.textContent = active.user && active.user.email ? active.user.email : '';
+    await loadHistory();
   }
 
   init();

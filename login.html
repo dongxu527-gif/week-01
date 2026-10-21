@@ -28,15 +28,41 @@
           <label for="email">邮箱</label>
           <input id="email" type="email" autocomplete="username" placeholder="name@example.com" required>
         </div>
-        <div class="field">
+        <div class="field password-field">
           <label for="password">密码</label>
           <input id="password" type="password" autocomplete="current-password" placeholder="请输入密码" required>
+          <button type="button" id="toggle-password" class="password-toggle">显示</button>
         </div>
         <p id="login-error" class="login-error" role="alert"></p>
         <button id="login-btn" type="submit" class="btn primary full">登录</button>
       </form>
 
-      <p class="login-note">账号由管理员开通。忘记密码或需要新账号，请联系管理员。</p>
+      <p class="login-links"><button type="button" id="show-reset" class="link-btn">忘记密码？</button></p>
+
+      <div id="reset-panel" class="login-panel" hidden>
+        <p class="panel-title">重置密码</p>
+        <p class="panel-text">输入登录邮箱，Supabase 会发一封重置链接。</p>
+        <div class="field">
+          <label for="reset-email">邮箱</label>
+          <input id="reset-email" type="email" autocomplete="username" placeholder="name@example.com">
+        </div>
+        <button type="button" id="send-reset" class="btn primary full">发送重置邮件</button>
+        <p id="reset-status" class="reset-status" role="status"></p>
+        <button type="button" id="back-login" class="link-btn">返回登录</button>
+      </div>
+
+      <div id="new-password-panel" class="login-panel" hidden>
+        <p class="panel-title">设置新密码</p>
+        <p class="panel-text">重置链接已生效，请输入新密码。</p>
+        <div class="field">
+          <label for="new-password">新密码</label>
+          <input id="new-password" type="password" autocomplete="new-password" placeholder="至少 6 位">
+        </div>
+        <button type="button" id="update-password" class="btn primary full">保存新密码</button>
+        <p id="new-password-status" class="reset-status" role="status"></p>
+      </div>
+
+      <p class="login-note">账号由管理员开通。忘记密码可以自助重置；需要新账号请联系管理员。</p>
       <p class="login-back"><a href="inspection.html">返回台账</a></p>
     </section>
   </main>

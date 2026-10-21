@@ -124,14 +124,29 @@
             <h2>生成结果</h2>
           </div>
           <div class="output-actions">
+            <button id="save-proposal" class="btn ghost small" type="button" disabled>保存方案</button>
+            <button id="download-word" class="btn ghost small" type="button" disabled>下载 Word</button>
+            <button id="toggle-edit" class="btn ghost small" type="button" disabled>编辑 Markdown</button>
             <button id="copy" class="btn ghost small" type="button" disabled>复制</button>
             <button id="download" class="btn ghost small" type="button" disabled>下载 Markdown</button>
           </div>
         </div>
         <div id="output" class="output-body">
-          <p class="empty">左侧填学校信息，点“生成方案初稿”。<br>生成后可以复制，也可以下载 Markdown 再改。</p>
+          <p class="empty">左侧填学校信息，点“生成方案初稿”。<br>生成后可以保存、编辑，也可以下载 Word 或 Markdown。</p>
         </div>
+        <textarea id="markdown-editor" class="markdown-editor" hidden aria-label="编辑方案 Markdown"></textarea>
       </section>
+    </section>
+
+    <section id="proposal-history" class="proposal-history" hidden>
+      <div class="history-head">
+        <div>
+          <p class="eyebrow">已保存方案</p>
+          <h2>最近保存</h2>
+        </div>
+        <span id="proposal-history-count" class="history-count"></span>
+      </div>
+      <div id="proposal-history-list" class="history-list"></div>
     </section>
   </main>
 

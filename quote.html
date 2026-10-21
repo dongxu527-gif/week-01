@@ -36,6 +36,11 @@
 
     <section class="calculator">
       <form id="quote-form" class="form-panel" novalidate>
+        <div class="field customer-field">
+          <label>客户 / 项目名称
+            <input id="customer" type="text" placeholder="例如：郑州实验小学（可不填）" maxlength="60">
+          </label>
+        </div>
         <div class="field-row">
           <label>岗位类型
             <select id="role">
@@ -103,8 +108,41 @@
         <div class="total"><span>合计</span><strong id="out-total">¥53,577</strong></div>
         <p class="summary-note">按示例单价估算，最终以现场评估和合同为准。</p>
         <button id="copy" class="btn primary full" type="button">复制报价单</button>
+        <div class="summary-actions">
+          <button id="save-quote" class="btn ghost small" type="button">保存报价</button>
+          <button id="print-quote" class="btn ghost small" type="button">打印 / 导出 PDF</button>
+        </div>
+        <p id="quote-user" class="quote-user"></p>
         <p id="copy-status" class="copy-status" aria-live="polite"></p>
       </aside>
+    </section>
+
+    <section id="quote-history" class="quote-history" hidden>
+      <div class="history-head">
+        <div>
+          <p class="eyebrow">历史报价</p>
+          <h2>最近保存</h2>
+        </div>
+        <span id="history-count" class="history-count"></span>
+      </div>
+      <div id="history-list" class="history-list"></div>
+    </section>
+
+    <section id="print-area" class="print-area" aria-hidden="true">
+      <div class="print-brand">中安安防 · ZHONGAN SECURITY</div>
+      <h1>安保服务报价单</h1>
+      <p class="print-meta"><span id="print-customer">客户：未填写</span><span id="print-date"></span></p>
+      <table class="print-table">
+        <tbody>
+          <tr><th>岗位</th><td id="print-role">门岗</td><th>单价</th><td id="print-rate">¥260 / 人 / 天</td></tr>
+          <tr><th>人数</th><td id="print-people">6 人</td><th>天数</th><td id="print-days">30 天</td></tr>
+          <tr><th>班次系数</th><td id="print-shift">1.0</td><th>人员费用</th><td id="print-labor">¥46,800</td></tr>
+          <tr><th>管理费</th><td id="print-management">¥3,744</td><th>税费</th><td id="print-tax">¥3,033</td></tr>
+          <tr><th>优惠</th><td id="print-discount">-¥0</td><th>合计</th><td id="print-total" class="print-total">¥53,577</td></tr>
+        </tbody>
+      </table>
+      <p class="print-note">备注：按示例单价估算，最终以现场评估和合同为准。本报价单不构成正式合同。</p>
+      <p class="print-foot">中安安防 · 校园安全服务 · 河南 · 郑州</p>
     </section>
 
     <section class="notes">
@@ -123,6 +161,8 @@
     <span>© 2026 中安安防</span>
   </footer>
 
+  <script src="vendor/supabase.js"></script>
+  <script src="supabase-config.js"></script>
   <script src="quote.js"></script>
   <script src="site-nav.js"></script>
 </body>

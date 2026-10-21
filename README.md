@@ -36,6 +36,8 @@ Supabase 的 publishable key 在前端 `supabase-config.js` 里，这是公开 k
 | `knowledge_documents` | 知识库文档 |
 | `profiles` | 用户角色（admin / inspector） |
 | `schools` | 学校 / 项目列表 |
+| `quotes` | 保存的报价单 |
+| `proposals` | 保存的方案初稿 |
 
 所有表都开启了 RLS。`schools` 和 `profiles` 的写操作只允许 admin。
 

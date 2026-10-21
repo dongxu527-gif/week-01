@@ -56,3 +56,41 @@
   .output-head { align-items: flex-start; flex-direction: column; }
   .output-actions { justify-content: flex-start; }
 }
+
+.markdown-editor {
+  display: block;
+  width: calc(100% - 40px);
+  min-height: 520px;
+  margin: 0 20px 20px;
+  padding: 12px;
+  border: 1px solid var(--line);
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--mono);
+  font-size: 12px;
+  line-height: 1.7;
+  resize: vertical;
+}
+.markdown-editor:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
+
+.proposal-history { max-width: 1180px; margin: 38px auto 0; padding-top: 22px; border-top: 1px solid var(--line); }
+.history-head { display: flex; justify-content: space-between; align-items: flex-end; gap: 16px; margin-bottom: 12px; }
+.history-head h2 { font-size: 24px; }
+.history-count { font-size: 11px; color: var(--muted); }
+.history-list { border-top: 1px solid var(--line); }
+.proposal-history .history-item { display: grid; grid-template-columns: 96px minmax(0, 1fr) 52px; gap: 14px; align-items: center; padding: 10px 0; border-bottom: 1px solid var(--line); font-size: 12.5px; }
+.history-date { color: var(--muted); font-family: var(--mono); font-size: 10.5px; }
+.history-customer { font-weight: 600; }
+.history-meta { display: block; font-size: 10.5px; color: var(--muted); font-weight: 400; margin-top: 2px; }
+.history-total { text-align: right; font-variant-numeric: tabular-nums; font-weight: 600; }
+.history-load { border: 1px solid var(--line); background: transparent; color: var(--muted); font: inherit; font-size: 10.5px; padding: 5px 7px; cursor: pointer; }
+.history-load:hover { border-color: var(--accent); color: var(--accent); }
+.history-empty { padding: 16px 0; color: var(--muted); font-size: 12px; }
+
+@media (max-width: 700px) {
+  .markdown-editor { width: calc(100% - 36px); margin: 0 18px 18px; min-height: 420px; }
+  .proposal-history .history-item { grid-template-columns: 1fr auto; gap: 4px 12px; }
+  .history-date { grid-column: 1 / -1; }
+  .history-total { text-align: left; }
+  .history-load { grid-column: 2; grid-row: 2; }
+}
