@@ -56,10 +56,11 @@
 
     <section class="ledger-grid">
       <form id="record-form" class="form-card" novalidate>
-        <h2>新增巡检记录</h2>
+        <h2 id="form-title">新增巡检记录</h2>
         <div class="field">
           <label for="school">学校 / 项目名称</label>
-          <input id="school" type="text" placeholder="例如：郑州实验小学" maxlength="40" required>
+          <input id="school" type="text" placeholder="例如：郑州实验小学" maxlength="40" list="school-options" required>
+          <datalist id="school-options"></datalist>
         </div>
         <div class="form-row">
           <div class="field">
@@ -106,7 +107,8 @@
         </div>
         <p id="form-error" class="form-error" role="alert"></p>
         <div class="form-actions">
-          <button type="submit" class="btn primary">保存记录</button>
+          <button type="submit" id="save-record" class="btn primary">保存记录</button>
+          <button type="button" id="cancel-edit" class="btn ghost" hidden>取消编辑</button>
           <button type="button" id="sample" class="btn ghost">加载示例</button>
         </div>
       </form>
@@ -176,5 +178,6 @@
   <script src="vendor/supabase.js"></script>
   <script src="supabase-config.js"></script>
   <script src="inspection.js"></script>
+  <script src="site-nav.js"></script>
 </body>
 </html>

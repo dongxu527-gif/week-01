@@ -68,6 +68,7 @@
               <h2>学校 / 项目</h2>
               <p id="schools-sub" class="panel-sub">共 0 个</p>
             </div>
+            <input id="school-search" type="search" class="school-search" placeholder="搜索学校、联系人" aria-label="搜索学校">
           </div>
 
           <details class="add-school">
@@ -113,7 +114,10 @@
                 </div>
               </div>
               <p id="school-error" class="form-error" role="alert"></p>
-              <button type="submit" class="btn primary small">保存学校</button>
+              <div class="school-form-actions">
+                <button type="submit" id="school-save" class="btn primary small">保存学校</button>
+                <button type="button" id="school-cancel" class="btn ghost small" hidden>取消编辑</button>
+              </div>
             </form>
           </details>
 
@@ -174,5 +178,6 @@
   <script src="vendor/supabase.js"></script>
   <script src="supabase-config.js"></script>
   <script src="admin.js"></script>
+  <script src="site-nav.js"></script>
 </body>
 </html>

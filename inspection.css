@@ -65,7 +65,9 @@
 .status-closed { color: #067647; background: #ecfdf3; }
 .status-select { border: 1px solid currentColor; background: transparent; padding: 3px 6px; font: inherit; font-size: 10.5px; line-height: 1.5; cursor: pointer; }
 .status-select:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
-.delete-btn { border: 1px solid var(--line); background: transparent; color: var(--muted); width: 26px; height: 26px; cursor: pointer; font-size: 15px; line-height: 1; }
+.delete-btn, .edit-btn { border: 1px solid var(--line); background: transparent; color: var(--muted); cursor: pointer; font-size: 11px; line-height: 1; padding: 5px 7px; }
+.edit-btn { margin-right: 5px; }
+.edit-btn:hover { border-color: var(--accent); color: var(--accent); }
 .delete-btn:hover { border-color: #b42318; color: #b42318; }
 .empty { padding: 46px 20px; text-align: center; color: var(--muted); }
 .empty p { margin: 0 0 6px; }

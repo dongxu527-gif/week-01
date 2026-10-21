@@ -21,6 +21,9 @@
 .panel-head { display: flex; justify-content: space-between; align-items: flex-end; gap: 14px; margin-bottom: 14px; }
 .panel-head h2 { font-size: 20px; }
 .panel-sub { margin: 3px 0 0; font-size: 10.5px; color: var(--muted); }
+.school-search { width: 160px; max-width: 42vw; padding: 7px 9px; border: 1px solid var(--line); background: var(--paper); color: var(--ink); font: inherit; font-size: 11px; }
+.school-search:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
+.school-form-actions { display: flex; gap: 8px; flex-wrap: wrap; }
 
 .add-school { border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); margin-bottom: 12px; }
 .add-school summary { cursor: pointer; padding: 10px 0; font-size: 12px; color: var(--accent); font-weight: 600; }
@@ -43,7 +46,9 @@
 .status-active { color: #067647; background: #ecfdf3; }
 .status-pilot { color: #b54708; background: #fffaeb; }
 .status-ended { color: var(--muted); background: var(--paper-2); }
-.delete-btn { border: 1px solid var(--line); background: transparent; color: var(--muted); width: 24px; height: 24px; cursor: pointer; }
+.delete-btn, .edit-btn { border: 1px solid var(--line); background: transparent; color: var(--muted); cursor: pointer; font-size: 10.5px; padding: 4px 6px; }
+.edit-btn { margin-right: 4px; }
+.edit-btn:hover { border-color: var(--accent); color: var(--accent); }
 .delete-btn:hover { border-color: #b42318; color: #b42318; }
 .empty-small { color: var(--muted); font-size: 12px; line-height: 1.6; padding: 12px 0; }
 

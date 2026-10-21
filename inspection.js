@@ -24,13 +24,19 @@
   const migrate = document.getElementById('migrate');
   const logout = document.getElementById('logout');
   const userEmail = document.getElementById('user-email');
+  const schoolOptions = document.getElementById('school-options');
+  const formTitle = document.getElementById('form-title');
+  const saveRecord = document.getElementById('save-record');
+  const cancelEdit = document.getElementById('cancel-edit');
 
   const toast = document.createElement('div');
   toast.className = 'toast';
   document.body.appendChild(toast);
 
   let records = [];
+  let schools = [];
   let session = null;
+  let editingId = null;
 
   function todayValue() {
     const now = new Date();
@@ -38,6 +44,27 @@
     const mm = String(now.getMonth() + 1).padStart(2, '0');
     const dd = String(now.getDate()).padStart(2, '0');
     return yyyy + '-' + mm + '-' + dd;
+  }
+
+  function findSchoolId(name) {
+    const target = String(name || '').trim();
+    const found = schools.find(function (school) { return school.name.trim() === target; });
+    return found ? found.id : null;
+  }
+
+  function renderSchoolOptions() {
+    if (!schoolOptions) return;
+    schoolOptions.innerHTML = schools.map(function (school) {
+      return '<option value="' + escapeHtml(school.name) + '"></option>';
+    }).join('');
+  }
+
+  async function loadSchools() {
+    const result = await client.from('schools').select('id,name').order('name');
+    if (!result.error) {
+      schools = result.data || [];
+      renderSchoolOptions();
+    }
   }
 
   function uid() {
@@ -94,6 +121,7 @@
       severity: row.severity,
       status: row.status,
       description: row.description,
+      schoolId: row.school_id,
       createdAt: row.created_at
     };
   }
@@ -106,7 +134,8 @@
       category: record.category,
       severity: record.severity,
       status: record.status,
-      description: record.description
+      description: record.description,
+      school_id: record.schoolId || findSchoolId(record.school) || null
     };
   }
 
@@ -188,7 +217,7 @@
         '<td data-label="问题" class="record-desc-cell"><span class="record-desc">' + escapeHtml(record.description) + '</span></td>' +
         '<td data-label="严重程度"><span class="badge ' + severityClass(record.severity) + '">' + escapeHtml(record.severity) + '</span></td>' +
         '<td data-label="状态">' + statusSelect(record) + '</td>' +
-        '<td class="action-cell"><button class="delete-btn" type="button" data-id="' + escapeHtml(record.id) + '" aria-label="删除这条记录">×</button></td>';
+        '<td class="action-cell"><button class="edit-btn" type="button" data-id="' + escapeHtml(record.id) + '">编辑</button><button class="delete-btn" type="button" data-id="' + escapeHtml(record.id) + '" aria-label="删除这条记录">×</button></td>';
       recordsBody.appendChild(tr);
     });
   }
@@ -206,6 +235,30 @@
     inspector.value = keepInspector;
     severity.value = '中';
     status.value = '待处理';
+    formError.textContent = '';
+  }
+
+  function startEdit(record) {
+    editingId = record.id;
+    formTitle.textContent = '编辑巡检记录';
+    saveRecord.textContent = '更新记录';
+    cancelEdit.hidden = false;
+    school.value = record.school;
+    date.value = record.date;
+    inspector.value = record.inspector;
+    category.value = record.category;
+    severity.value = record.severity;
+    status.value = record.status;
+    description.value = record.description;
+    formError.textContent = '';
+    form.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+
+  function endEdit() {
+    editingId = null;
+    formTitle.textContent = '新增巡检记录';
+    saveRecord.textContent = '保存记录';
+    cancelEdit.hidden = true;
     formError.textContent = '';
   }
 
@@ -229,8 +282,15 @@
     return rowToRecord(result.data);
   }
 
+  async function updateRecord(id, values) {
+    const row = recordToRow(values);
+    row.updated_at = new Date().toISOString();
+    const result = await client.from(TABLE).update(row).eq('id', id);
+    if (result.error) throw result.error;
+  }
+
   async function updateStatus(id, value) {
-    const result = await client.from(TABLE).update({ status: value }).eq('id', id);
+    const result = await client.from(TABLE).update({ status: value, updated_at: new Date().toISOString() }).eq('id', id);
     if (result.error) throw result.error;
   }
 
@@ -293,17 +353,37 @@
       if (values.description.length < 4) { formError.textContent = '问题描述至少写 4 个字。'; description.focus(); return; }
 
       try {
-        const record = await insertRecord(values);
-        records.unshift(record);
-        refresh();
-        resetForm(true);
-        showToast('巡检记录已保存');
+        if (editingId) {
+          await updateRecord(editingId, values);
+          const index = records.findIndex(function (item) { return item.id === editingId; });
+          if (index >= 0) {
+            records[index] = Object.assign({}, records[index], values, { schoolId: findSchoolId(values.school) });
+          }
+          endEdit();
+          resetForm(true);
+          refresh();
+          showToast('巡检记录已更新');
+        } else {
+          const record = await insertRecord(values);
+          records.unshift(record);
+          refresh();
+          resetForm(true);
+          showToast('巡检记录已保存');
+        }
       } catch (err) {
-        formError.textContent = '保存失败：' + (err.message || '请重试');
+        formError.textContent = (editingId ? '更新失败：' : '保存失败：') + (err.message || '请重试');
       }
     });
 
     recordsBody.addEventListener('click', async function (event) {
+      const editButton = event.target.closest('.edit-btn');
+      if (editButton) {
+        const editId = editButton.getAttribute('data-id');
+        const recordToEdit = records.find(function (item) { return item.id === editId; });
+        if (recordToEdit) startEdit(recordToEdit);
+        return;
+      }
+
       const button = event.target.closest('.delete-btn');
       if (!button) return;
       const id = button.getAttribute('data-id');
@@ -313,6 +393,7 @@
       try {
         await deleteRecord(id);
         records = records.filter(function (item) { return item.id !== id; });
+        if (editingId === id) { endEdit(); resetForm(false); }
         refresh();
         showToast('记录已删除');
       } catch (err) {
@@ -337,6 +418,11 @@
         showToast('状态更新失败：' + (err.message || '请重试'));
         render();
       }
+    });
+
+    cancelEdit.addEventListener('click', function () {
+      endEdit();
+      resetForm(false);
     });
 
     search.addEventListener('input', render);
@@ -487,6 +573,7 @@
     userEmail.textContent = current.user && current.user.email ? current.user.email : '';
 
     try {
+      await loadSchools();
       await fetchRecords();
     } catch (err) {
       showToast('读取数据库失败：' + (err.message || '请刷新重试'));
