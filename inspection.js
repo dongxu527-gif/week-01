@@ -437,6 +437,10 @@
     });
 
     document.getElementById('sample').addEventListener('click', async function () {
+      if (records.some(function (record) { return String(record.school).startsWith('示例·'); })) {
+        showToast('示例数据已经加载过，不再重复添加');
+        return;
+      }
       const today = todayValue();
       const samples = [
         { school: '示例·实验小学', date: today, inspector: '张师傅', category: '围墙', severity: '高', status: '待处理', description: '东侧围墙监控盲区，夜间无法看清，建议加装补光灯。' },

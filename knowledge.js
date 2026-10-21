@@ -73,6 +73,7 @@
     const result = await client
       .from('knowledge_documents')
       .select('id,title,content,created_at')
+      .is('deleted_at', null)
       .order('created_at', { ascending: false });
 
     if (result.error) {
@@ -125,8 +126,8 @@
   }
 
   async function removeDocument(doc) {
-    if (!window.confirm('确定删除“' + doc.title + '”？删除后问答就查不到这篇资料了。')) return;
-    const result = await client.from('knowledge_documents').delete().eq('id', doc.id);
+    if (!window.confirm('确定移除“' + doc.title + '”？移除后问答就查不到这篇资料了，但数据仍可在数据库恢复。')) return;
+    const result = await client.from('knowledge_documents').update({ deleted_at: new Date().toISOString() }).eq('id', doc.id);
     if (result.error) {
       showError(docError, '删除失败：' + result.error.message);
       return;
