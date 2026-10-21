@@ -13,6 +13,7 @@
 .panel-head h2, .chat-head h2 { font-size: 20px; }
 .chat-head { padding: 18px 20px; border-bottom: 1px solid var(--line); }
 .chat-hint { font-size: 10px; color: var(--muted); border: 1px solid var(--line); padding: 3px 7px; }
+.panel-actions { display: flex; align-items: center; gap: 8px; }
 .doc-count { font-size: 11px; color: var(--muted); }
 
 .doc-form { margin-top: 16px; padding-bottom: 16px; border-bottom: 1px solid var(--line); }
