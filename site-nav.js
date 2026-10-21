@@ -28,6 +28,29 @@
       button.setAttribute('aria-label', open ? '关闭菜单' : '打开菜单');
     });
 
+    const tools = nav.querySelector('.nav-tools');
+    const toolsToggle = nav.querySelector('.nav-tools-toggle');
+    if (tools && toolsToggle) {
+      toolsToggle.addEventListener('click', function (event) {
+        event.preventDefault();
+        event.stopPropagation();
+        const open = tools.classList.toggle('open');
+        toolsToggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+      });
+      document.addEventListener('click', function (event) {
+        if (!tools.contains(event.target)) {
+          tools.classList.remove('open');
+          toolsToggle.setAttribute('aria-expanded', 'false');
+        }
+      });
+      document.addEventListener('keydown', function (event) {
+        if (event.key === 'Escape') {
+          tools.classList.remove('open');
+          toolsToggle.setAttribute('aria-expanded', 'false');
+        }
+      });
+    }
+
     links.addEventListener('click', function (event) {
       if (event.target.closest('a')) close();
     });

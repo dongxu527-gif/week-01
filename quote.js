@@ -338,7 +338,7 @@
     saveQuote.textContent = '保存报价';
 
     if (result.error) {
-      copyStatus.textContent = '保存失败：' + result.error.message;
+      copyStatus.textContent = '保存失败：' + window.friendlyError(result.error);
       return;
     }
     copyStatus.textContent = '报价已保存，可以在下方历史报价里载入。';

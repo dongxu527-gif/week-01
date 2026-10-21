@@ -373,7 +373,7 @@
       setOutput(result.text, '');
       setStatus('AI 生成', 'ai');
     } catch (err) {
-      setOutput(localProposal(data), 'AI 接口暂时不可用，已用本地模板生成初稿。错误：' + (err.message || '请重试'));
+      setOutput(localProposal(data), 'AI 接口暂时不可用，已用本地模板生成初稿。错误：' + window.friendlyError(err));
       setStatus('本地模板', 'demo');
     } finally {
       generateBtn.disabled = false;
@@ -434,7 +434,7 @@
     saveProposalBtn.textContent = '保存方案';
 
     if (result.error) {
-      formError.textContent = '保存失败：' + result.error.message;
+      formError.textContent = '保存失败：' + window.friendlyError(result.error);
       return;
     }
     formError.textContent = '';

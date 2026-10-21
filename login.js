@@ -70,7 +70,7 @@
     sendReset.disabled = false;
     sendReset.textContent = '发送重置邮件';
     if (result.error) {
-      resetStatus.textContent = '发送失败：' + result.error.message;
+      resetStatus.textContent = '发送失败：' + window.friendlyError(result.error);
       return;
     }
     resetStatus.textContent = '如果这个邮箱已开通账号，重置邮件已经发出，请查收（含垃圾箱）。';
@@ -89,7 +89,7 @@
     updatePassword.disabled = false;
     updatePassword.textContent = '保存新密码';
     if (result.error) {
-      newPasswordStatus.textContent = '保存失败：' + result.error.message;
+      newPasswordStatus.textContent = '保存失败：' + window.friendlyError(result.error);
       return;
     }
     newPasswordStatus.textContent = '密码已更新，正在进入系统…';

@@ -19,11 +19,16 @@
       <a href="index.html#services">服务</a>
       <a href="index.html#scenarios">场景</a>
       <a href="index.html#advantages">优势</a>
-      <a href="quote.html">报价</a>
-      <a href="proposal.html">方案</a>
-      <a href="knowledge.html" aria-current="page">知识</a>
-      <a href="inspection.html">台账</a>
-      <a href="admin.html">后台</a>
+      <div class="nav-tools">
+        <button type="button" class="nav-tools-toggle" aria-expanded="false">工具</button>
+        <div class="nav-tools-menu">
+          <a href="quote.html">报价</a>
+          <a href="proposal.html">方案</a>
+          <a href="knowledge.html" aria-current="page">知识</a>
+          <a href="inspection.html">台账</a>
+          <a href="admin.html">后台</a>
+        </div>
+      </div>
       <a href="index.html#contact">联系</a>
     </nav>
     <a class="nav-cta" href="quote.html">立即报价</a>
@@ -75,7 +80,7 @@
           <button id="refresh-docs" class="text-btn" type="button">刷新</button>
         </div>
         <div id="doc-list" class="doc-list">
-          <p class="empty-small">还没有文档，先添加第一篇。</p>
+          <p class="empty-small">正在读取知识库…</p>
         </div>
       </aside>
 
@@ -115,6 +120,7 @@
 
   <script src="vendor/supabase.js"></script>
   <script src="supabase-config.js"></script>
+  <script src="ui-utils.js"></script>
   <script src="knowledge.js"></script>
   <script src="site-nav.js"></script>
 </body>

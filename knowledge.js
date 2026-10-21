@@ -77,7 +77,7 @@
       .order('created_at', { ascending: false });
 
     if (result.error) {
-      docList.innerHTML = '<p class="empty-small">读取失败：' + result.error.message + '</p>';
+      docList.innerHTML = '<p class="empty-small">读取失败：' + window.friendlyError(result.error) + '</p>';
       return;
     }
 
@@ -129,7 +129,7 @@
     if (!window.confirm('确定移除“' + doc.title + '”？移除后问答就查不到这篇资料了，但数据仍可在数据库恢复。')) return;
     const result = await client.from('knowledge_documents').update({ deleted_at: new Date().toISOString() }).eq('id', doc.id);
     if (result.error) {
-      showError(docError, '删除失败：' + result.error.message);
+      showError(docError, '删除失败：' + window.friendlyError(result.error));
       return;
     }
     await loadDocuments();
@@ -176,7 +176,7 @@
     button.textContent = '保存文档';
 
     if (result.error) {
-      showError(docError, '保存失败：' + result.error.message);
+      showError(docError, '保存失败：' + window.friendlyError(result.error));
       return;
     }
 
@@ -236,7 +236,7 @@
 
       appendMessage('assistant', data.answer || '没有返回内容。', data.sources || []);
     } catch (err) {
-      appendMessage('assistant', '查询失败：' + (err.message || '请检查网络后重试'));
+      appendMessage('assistant', '查询失败：' + window.friendlyError(err));
     } finally {
       askBtn.disabled = false;
       askBtn.textContent = '提问';

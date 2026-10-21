@@ -50,7 +50,7 @@
     userEmail.textContent = active.user && active.user.email ? active.user.email : '';
     const result = await client.from('profiles').select('id,email,role').eq('id', active.user.id).maybeSingle();
     if (result.error) {
-      showDenied('读取账号权限失败：' + result.error.message);
+      showDenied('读取账号权限失败：' + window.friendlyError(result.error));
       return false;
     }
     if (!result.data) {
@@ -76,7 +76,7 @@
 
     for (let i = 0; i < results.length; i += 1) {
       if (results[i].error) {
-        showDenied('读取数据失败：' + results[i].error.message);
+        showDenied('读取数据失败：' + window.friendlyError(results[i].error));
         return false;
       }
     }
@@ -320,7 +320,7 @@
       : await client.from('schools').insert(payload);
 
     if (result.error) {
-      error.textContent = (editingSchoolId ? '更新失败：' : '保存失败：') + result.error.message;
+      error.textContent = (editingSchoolId ? '更新失败：' : '保存失败：') + window.friendlyError(result.error);
       return;
     }
 
@@ -345,7 +345,7 @@
     if (!window.confirm('确定删除“' + school.name + '”？巡检记录不会被删除，但学校列表里会移除。')) return;
     const result = await client.from('schools').delete().eq('id', id);
     if (result.error) {
-      window.alert('删除失败：' + result.error.message);
+      window.alert('删除失败：' + window.friendlyError(result.error));
       return;
     }
     if (editingSchoolId === id) resetSchoolForm();
@@ -359,7 +359,7 @@
     const role = select.value;
     const result = await client.from('profiles').update({ role: role }).eq('id', id);
     if (result.error) {
-      window.alert('修改角色失败：' + result.error.message);
+      window.alert('修改角色失败：' + window.friendlyError(result.error));
       await refreshAll();
       return;
     }
@@ -381,7 +381,7 @@
     if (failed) {
       button.disabled = false;
       button.textContent = '全量备份';
-      window.alert('备份失败：' + failed.error.message);
+      window.alert('备份失败：' + window.friendlyError(failed.error));
       return;
     }
     const payload = {

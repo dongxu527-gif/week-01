@@ -110,3 +110,5 @@
   .records-table td.action-cell { justify-content: flex-end; padding-top: 8px; }
   .records-table td.action-cell::before { display: none; }
 }
+
+.ledger-loading { padding: 10px 0 18px; color: var(--muted); font-size: 12px; }

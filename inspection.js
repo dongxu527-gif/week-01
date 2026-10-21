@@ -25,6 +25,7 @@
   const logout = document.getElementById('logout');
   const userEmail = document.getElementById('user-email');
   const schoolOptions = document.getElementById('school-options');
+  const ledgerLoading = document.getElementById('ledger-loading');
   const formTitle = document.getElementById('form-title');
   const saveRecord = document.getElementById('save-record');
   const cancelEdit = document.getElementById('cancel-edit');
@@ -371,7 +372,7 @@
           showToast('巡检记录已保存');
         }
       } catch (err) {
-        formError.textContent = (editingId ? '更新失败：' : '保存失败：') + (err.message || '请重试');
+        formError.textContent = (editingId ? '更新失败：' : '保存失败：') + window.friendlyError(err);
       }
     });
 
@@ -397,7 +398,7 @@
         refresh();
         showToast('记录已删除');
       } catch (err) {
-        showToast('删除失败：' + (err.message || '请重试'));
+        showToast('删除失败：' + window.friendlyError(err));
       }
     });
 
@@ -415,7 +416,7 @@
         render();
         showToast('状态已更新');
       } catch (err) {
-        showToast('状态更新失败：' + (err.message || '请重试'));
+        showToast('状态更新失败：' + window.friendlyError(err));
         render();
       }
     });
@@ -459,7 +460,7 @@
         refresh();
         showToast('已加载 3 条示例记录');
       } catch (err) {
-        showToast('加载示例失败：' + (err.message || '请重试'));
+        showToast('加载示例失败：' + window.friendlyError(err));
       }
     });
 
@@ -504,7 +505,7 @@
           refresh();
           showToast('已导入 ' + additions.length + ' 条记录');
         } catch (err) {
-          showToast('导入失败：' + (err.message || '文件不是有效的 JSON'));
+          showToast('导入失败：' + (err instanceof SyntaxError ? '文件不是有效的 JSON' : window.friendlyError(err)));
         } finally {
           restoreFile.value = '';
         }
@@ -556,7 +557,7 @@
         migrate.hidden = true;
         showToast('本地旧数据已导入 ' + additions.length + ' 条');
       } catch (err) {
-        showToast('导入失败：' + (err.message || '请重试'));
+        showToast('导入失败：' + window.friendlyError(err));
       }
     });
 
@@ -576,13 +577,15 @@
     session = current;
     userEmail.textContent = current.user && current.user.email ? current.user.email : '';
 
+    if (ledgerLoading) ledgerLoading.hidden = false;
     try {
       await loadSchools();
       await fetchRecords();
     } catch (err) {
-      showToast('读取数据库失败：' + (err.message || '请刷新重试'));
+      showToast('读取数据库失败：' + window.friendlyError(err));
     }
 
+    if (ledgerLoading) ledgerLoading.hidden = true;
     bindEvents();
     date.value = todayValue();
     refresh();
