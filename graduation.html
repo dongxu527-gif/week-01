@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex,nofollow">
+  <title>结业证书 · AI 编程十周训练</title>
+  <style>
+    :root {
+      --paper: #f5f2e9;
+      --ink: #1c1b18;
+      --muted: #6f695d;
+      --line: #c9c1b1;
+      --accent: #a33b2b;
+      --navy: #172b3d;
+      --serif: "Songti SC", "STSong", "Noto Serif CJK SC", serif;
+      --sans: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+      --mono: "SF Mono", "Menlo", "Consolas", monospace;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--paper); color: var(--ink); font-family: var(--sans); -webkit-font-smoothing: antialiased; }
+    .cert-page { max-width: 1060px; margin: 0 auto; padding: 48px 24px 56px; }
+    .cert {
+      position: relative;
+      background: #fbf8f1;
+      border: 1px solid var(--line);
+      padding: 46px 54px 40px;
+      min-height: 650px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .cert::before {
+      content: "";
+      position: absolute;
+      inset: 14px;
+      border: 1px solid rgba(163, 59, 43, .28);
+      pointer-events: none;
+    }
+    .cert-top { display: flex; justify-content: space-between; gap: 20px; font-family: var(--mono); font-size: 10px; letter-spacing: .16em; text-transform: uppercase; color: var(--muted); }
+    .cert-main { position: relative; z-index: 1; padding: 22px 0 10px; }
+    .eyebrow { margin: 0 0 8px; font-family: var(--mono); font-size: 10px; letter-spacing: .18em; text-transform: uppercase; color: var(--accent); }
+    h1 { font-family: var(--serif); font-size: clamp(52px, 8vw, 86px); line-height: 1; letter-spacing: -.04em; font-weight: 600; margin: 0 0 24px; }
+    .cert-lead { color: var(--muted); font-size: 14px; margin: 0 0 4px; }
+    h2 { font-family: var(--serif); font-size: clamp(38px, 5vw, 56px); line-height: 1.1; letter-spacing: -.03em; font-weight: 600; margin: 0 0 10px; }
+    .cert-text { font-family: var(--serif); font-size: clamp(17px, 2vw, 21px); line-height: 1.7; margin: 0 0 26px; max-width: 780px; }
+    .cert-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); max-width: 900px; }
+    .cert-item { padding: 12px 14px 12px 0; border-right: 1px solid var(--line); font-size: 12.5px; line-height: 1.5; }
+    .cert-item:nth-child(3n) { border-right: 0; }
+    .cert-item:nth-child(-n+3) { border-bottom: 1px solid var(--line); }
+    .cert-item span { display: block; font-family: var(--mono); font-size: 9px; letter-spacing: .12em; color: var(--accent); margin-bottom: 3px; }
+    .cert-skills { font-size: 11px; color: var(--muted); letter-spacing: .02em; margin-top: 18px; }
+    .cert-foot { display: flex; justify-content: space-between; align-items: flex-end; gap: 24px; margin-top: 28px; position: relative; z-index: 1; }
+    .seal { width: 84px; height: 84px; border: 2px solid var(--accent); color: var(--accent); display: grid; place-items: center; font-family: var(--serif); font-size: 26px; letter-spacing: .12em; transform: rotate(-5deg); line-height: 1.1; text-align: center; }
+    .sign { text-align: right; font-size: 11px; color: var(--muted); line-height: 1.7; }
+    .sign strong { display: block; color: var(--ink); font-family: var(--serif); font-size: 20px; font-weight: 600; letter-spacing: .02em; }
+    .cert-actions { display: flex; gap: 12px; justify-content: center; margin-top: 22px; }
+    .cert-actions a { color: var(--muted); font-size: 12px; text-decoration: none; border-bottom: 1px solid var(--line); padding-bottom: 2px; }
+    .cert-actions a:hover { color: var(--accent); border-color: var(--accent); }
+    @media (max-width: 760px) {
+      .cert-page { padding: 18px 12px 36px; }
+      .cert { padding: 28px 22px 26px; min-height: auto; }
+      .cert-top { font-size: 8px; letter-spacing: .1em; }
+      h1 { font-size: 46px; }
+      h2 { font-size: 38px; }
+      .cert-grid { grid-template-columns: 1fr 1fr; }
+      .cert-item:nth-child(3n) { border-right: 1px solid var(--line); }
+      .cert-item:nth-child(2n) { border-right: 0; }
+      .cert-item:nth-child(-n+4) { border-bottom: 1px solid var(--line); }
+      .cert-foot { align-items: center; }
+      .seal { width: 68px; height: 68px; font-size: 20px; }
+    }
+    @media print {
+      @page { size: A4 landscape; margin: 9mm; }
+      body { background: #fff; }
+      .cert-page { padding: 0; max-width: none; }
+      .cert { min-height: 0; height: 190mm; padding: 28mm 32mm 22mm; page-break-inside: avoid; }
+      .cert-actions { display: none; }
+      h1 { font-size: 64pt; }
+      h2 { font-size: 40pt; }
+      .cert-text { font-size: 16pt; }
+      .cert-item { font-size: 11pt; }
+      .cert-skills { font-size: 9pt; }
+    }
+  </style>
+</head>
+<body>
+  <main class="cert-page">
+    <section class="cert">
+      <div class="cert-top">
+        <span>AI Programming · 10-Week Program</span>
+        <span>2026.10.21</span>
+      </div>
+
+      <div class="cert-main">
+        <p class="eyebrow">结业证明</p>
+        <h1>结业证书</h1>
+        <p class="cert-lead">兹证明</p>
+        <h2>董哥</h2>
+        <p class="cert-text">已完成「AI 编程十周训练」全部课程，<br>并上线一套校园安全工具站。</p>
+
+        <div class="cert-grid">
+          <div class="cert-item"><span>01</span>公司首页</div>
+          <div class="cert-item"><span>02</span>安保报价计算器</div>
+          <div class="cert-item"><span>03</span>AI 方案生成器</div>
+          <div class="cert-item"><span>04</span>校园巡检台账</div>
+          <div class="cert-item"><span>05</span>投标与制度知识库</div>
+          <div class="cert-item"><span>06</span>项目管理后台</div>
+        </div>
+
+        <p class="cert-skills">需求拆解 · AI 结对 · Supabase · RLS 权限 · DeepSeek API · Vercel 部署</p>
+      </div>
+
+      <div class="cert-foot">
+        <div class="seal">结业</div>
+        <div class="sign">
+          <span>授课 / 小安</span>
+          <strong>2026.10.21</strong>
+        </div>
+      </div>
+    </section>
+
+    <div class="cert-actions">
+      <a href="runbook.html">查看运行手册</a>
+      <a href="admin.html">返回后台</a>
+      <a href="index.html">返回首页</a>
+    </div>
+  </main>
+</body>
+</html>

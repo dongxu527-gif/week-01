@@ -9,6 +9,7 @@
 - 知识库：https://week-01-steel.vercel.app/knowledge.html
 - 后台：https://week-01-steel.vercel.app/admin.html
 - 运行手册：https://week-01-steel.vercel.app/runbook.html
+- 结业证书：https://week-01-steel.vercel.app/graduation.html
 
 ## 技术结构
 
